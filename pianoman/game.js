@@ -15,7 +15,7 @@ let audioName = ["birthday.mp3", "", "", ""];
 let laneText = ["A", "S", "D", "F"];
 let lanePressed = [0, 0, 0, 0];
 
-let bpm = [400]; //한 박자 시간
+let bpm = [500]; //한 박자 시간
 let startDelayArr = [3000]; //첫 노트가 나온 후 음악이 시작되기 까지의 시간
 
 class Game {
@@ -187,5 +187,9 @@ class Game {
         fill(0);
         text("hit: " + this.hit, 800, 50);
         text("miss: " + this.miss, 800, 100);
+    }
+
+    resetButtonClicked() {
+        this.song.stop();
     }
 }

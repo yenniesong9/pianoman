@@ -44,8 +44,10 @@ function draw() {
 function mouseClicked() {
   if (mouseX > 10 && mouseX < 60 && mouseY > 10 && mouseY < 60) {
     button = !button;
-    game = new Game(0, song0);
-    //song0.play();
+    if (button == 0) {
+      game.resetButtonClicked();
+      game = new Game(0, song0);
+    }
   }
 }
 
