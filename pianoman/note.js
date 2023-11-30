@@ -1,16 +1,38 @@
+let laneStartX = [100, 300, 500, 700];
+let laneStartY = 900;
+let laneColor = ['pink', 'red', 'salmon', 'orange'];
+
+
 class Note {
-    constructor(num, lane, interval) {
-        this.num = num; //몇 번째 노트인지
+    height = 50;
+    width = 100;
+
+    constructor(lane, timing) {
         this.lane = lane; //몇 번째 레인인지
-        this.interval = interval; //앞 노트와의 간격
+        this.timing = timing; //시작으로부터의 타이밍
+        
+        this.y = -50;
+        this.x = laneStartX[lane];
+
+        //한 번 할 떄마다 얼마나 이동할 것인지
+        this.speed = 5;
     }
 
     display() {
-        //노트 그리기
+        //노트를 화면에 표시
+        fill(laneColor[this.lane]);
+        rect(this.x, this.y, this.width, this.height);
+        //위치 업데이트
+        this.y += this.speed;
+        //노트가 화면 밖으로 나가거나 유저가 버튼을 눌러서 삭제되는 경우는 게임 클래스에서 처리
     }
 
-    checkHit() {
-        //노트가 레인에 닿았는지 확인
-        //닿았다면 true, 아니라면 false 리턴
+    checkHit(lane) { //lane에 닿았다면 true 반환
+        if (lane == this.lane) { //lane이 같음
+            if (this.y + this.height >= laneStartY) { //노트가 레인에 닿음
+                return true;
+            }
+        }
+        return false;
     }
 }
