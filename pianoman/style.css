@@ -6,3 +6,11 @@ html, body {
 canvas {
   display: block;
 }
+
+body {
+  margin: 0;
+  display: flex;
+
+  /*캔버스를 화면 중앙에 표시*/
+  justify-content: center;
+}
