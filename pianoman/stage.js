@@ -15,14 +15,14 @@ let isLeftKeyPressed = false;
 let isRightKeyPressed = false;
 
 function preload() {
-  bg_main = loadImage("assets/map_main.png");
-  bg_npc = loadImage("assets/bg_npc.jpg");
+  bg_main = loadImage("images/background/bg_main.png");
+  bg_npc = loadImage("images/background/bg_npc.jpg");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  bg_main.resize(width, height);
-  bg_npc.resize(width,height);
+  bg_main.resize(width, height); // 캔버스 크기에 맞게 resize
+  bg_npc.resize(width,height); // 캔버스 크기에 맞게 resize
   //image(bg_main, 0, 0);
   //background(0);
   rectMode(CENTER);
