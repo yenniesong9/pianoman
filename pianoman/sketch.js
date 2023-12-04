@@ -140,12 +140,14 @@ function lobby() {
   }
 }
 
-function talk_npc(){ //사연공간 세부
+function talk_npc(){
   image(bg_npc,0,0);
+  
+  //npc 이미지
+  playingNPC.imageBasic.resize(700,875);
+  image(playingNPC.imageBasic,width-860,height-940);
 
   //스크립트 디스플레이 공간
-  fill(0,100);
-  rect(width/2,height/2+200,width,height/2);
   fill(255);
   textSize(20);
   playingNPC.display();
@@ -159,12 +161,17 @@ function rhythm(){
 
 function success() {
   image(bg_npc,0,0);
-
+  
+  //npc그림 이미지
+  image(bg_npc,0,0);
+  playingNPC.imageSuccess.resize(700,875);
+  image(playingNPC.imageSuccess,width-860,height-940);
+  
   //스크립트 디스플레이 공간
-  fill(0,100);
-  rect(width/2,height/2+200,width,height/2);
+  fill(0,150);
+  rect(width/2,height/2+350,width,height/3);
   fill(255);
-  textSize(20);
+  textSize(28);
   playingNPC.display();
 }
 
@@ -172,8 +179,8 @@ function fail() {
   image(bg_npc,0,0);
 
   //스크립트 디스플레이 공간
-  fill(0,100);
-  rect(width/2,height/2+200,width,height/2);
+  fill(0,150);
+  rect(width/2,height/2+350,width,height/3);
   fill(255);
   textSize(20);
   playingNPC.display();
