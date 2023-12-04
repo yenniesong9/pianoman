@@ -18,7 +18,8 @@ class NPC {
     display() {
         if (this.mode == 0) {
             //게임 전 스크립트 진행
-            text(scripts[this.num][this.mode][this.scriptPointer], width / 2, height / 2);
+            image(this.imageBasic, 280, 50);
+            text(scripts[this.num][this.mode][this.scriptPointer], width / 2, height/2  + 100);
             fill(255);
             rect(900, 900, 150, 50);
             fill(0);
@@ -28,6 +29,7 @@ class NPC {
                 text("연주하러 가기", 900, 900);
             }
         } else {
+            image(this.imageSuccess, 280, 50);
             text(scripts[this.num][this.mode][this.scriptPointer], width / 2, height / 2);
             fill(255);
             rect(900, 900, 150, 50);

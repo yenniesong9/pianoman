@@ -19,6 +19,8 @@ let NPC_position = [[310, 330], [585, 350], [0, 0], [0, 0]]; //npc 위치 저장
 let NPC_w = 100; //화면에 표시하는 크기
 let NPC_h = 130;
 
+
+let games = [];
 let playingGame;
 let song0;
 let button = 0;
@@ -46,7 +48,7 @@ function preload() {
     NPC_pngs[i] = pixel;
     let basic = loadImage('images/NPC/손님' + (i+1) + '기본(픽셀화).png');
     let success = loadImage('images/NPC/손님' + (i+1) + '성공(픽셀화).png');
-    let npc = new NPC(0, basic, success);
+    let npc = new NPC(i, basic, success);
     NPCs[i] = npc;
     console.log(NPCs[i]);
   }
@@ -55,6 +57,7 @@ function preload() {
 
   //음악 불러오기
   song0 = loadSound('audio/birthday.mp3');
+  song1 = loadSound('audio/okdal.mp3');
 }
 
 function setup() {
@@ -68,11 +71,12 @@ function setup() {
   textAlign(CENTER);
 
   //game 미리 생성 (임시)
-  playingGame = new Game(0, song0);
-
+  games[0] = new Game(0, song0);
+  games[1] = new Game(1, song1);
 }
 
 function draw() {
+  //console.log(playingNPC);
   if (stage == 0) { 
     lobby();
   } else if (stage == 1){
@@ -132,6 +136,7 @@ function lobby() {
     if (keyIsDown(SHIFT)){
       stage = 1;
       playingNPC = NPCs[selectableNPC];
+      console.log("selectabel num: " , selectableNPC);
     }
   }
 }
@@ -203,7 +208,6 @@ function nearNPCs() {
 
 
 
-
 //--------------- 외부 입력과 관련된 함수들 -----------------//
 
 function mouseClicked() {
@@ -212,6 +216,9 @@ function mouseClicked() {
   if (stage == 1 || stage == 3 || stage == 4) { //스크립트 플레이
     if (mouseX > 825 && mouseX < 975 && mouseY > 875 && mouseY < 975) {
       if (playingNPC.isPlayable()) {
+        playingGame = games[playingNPC.num];
+        console.log("playing NPC num here: ", playingNPC.num);
+        console.log(playingGame);
         stage = 2;
       } else if (playingNPC.isReturnable()) {
         stage = 0;
