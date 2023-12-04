@@ -131,10 +131,19 @@ class Game {
                 } else {
                     text("Game Over", 300, 500);   
                 }
+                fill(255);
+                rect(500, 700, 200, 100);
+                fill(0);
+                textSize(30);
+                text("게임 종료", 500, 700);
             }
         } else {
             //게임 시작
-            this.start();
+            text("대기 화면", 500, 500);
+            fill(255);
+            rect(500, 700, 200, 100);
+            fill(0);
+            text("플레이", 500, 700);
         }
         
     }
@@ -176,20 +185,36 @@ class Game {
                 fill(255);
             }
             rect(laneStartX[i], laneStartY, 100, 50);
-            textSize(50);
+            textSize(30);
             fill(0);
-            text(laneText[i], laneStartX[i]+30, laneStartY+40);
+            text(laneText[i], laneStartX[i], laneStartY+10);
         }
     }
 
     drawStatistics() {
         textSize(40);
-        fill(0);
+        fill(255);
         text("hit: " + this.hit, 800, 50);
         text("miss: " + this.miss, 800, 100);
     }
 
+    startButtonClicked() {
+        if (this.play == 0) this.start();
+    }
+
     resetButtonClicked() {
         this.song.stop();
+    }
+
+    returnResult() { //0이라면 진행 중, 1이라면 성공, -1이라면 실패
+        if (this.gameEnd) {
+            if (this.hit/this.notes.length > 0.8) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } else {
+            return 0;
+        }
     }
 }

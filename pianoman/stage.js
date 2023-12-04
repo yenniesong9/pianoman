@@ -103,9 +103,9 @@ function lobby() {
   }
 
 function talk_npc(){ //사연공간 세부
-  background(0);
+  //background(0);
   image(bg_npc,0,0);
-  fill(0,100);
+  //fill(0,100);
   rect(width/2,height/2+200,width,height/2);
 
   //스크립트 디스플레이 공간
@@ -130,6 +130,7 @@ function success(){ //성공 스크립트 세부
   background(0);
   image(bg_npc,0,0);
   fill(0,100);
+  console.log(here);
   rect(width/2,height/2+200,width,height/2);
   
   //스크립트 내용
