@@ -26,8 +26,10 @@ class NPC {
         rect(width/2,height/2+350,width,height/3);
         if (this.mode == 0) {
             //게임 전 스크립트 진행
+            image(this.imageBasic, 280, 50);
             text(scripts[this.num][this.mode][this.scriptPointer], width / 2, height / 2 + 310);
             let button = new Button(900, 950, 150, 50);
+
             if (this.scriptPointer < scripts[this.num][this.mode].length - 1) {
                 button.setTitle("다음으로");
             } else {
@@ -35,6 +37,7 @@ class NPC {
             }
             button.show();
         } else {
+            image(this.imageSuccess, 280, 50);
             text(scripts[this.num][this.mode][this.scriptPointer], width / 2, height / 2);
             let button = new Button(900, 950, 150, 50)
             if (this.scriptPointer < scripts[this.num][this.mode].length - 1) {
