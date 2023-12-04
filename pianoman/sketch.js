@@ -149,10 +149,8 @@ function talk_npc(){
   image(bg_npc,0,0);
 
   //스크립트 디스플레이 공간
-  fill(0,150);
-  rect(width/2,height/2+350,width,height/3);
   fill(255);
-  textSize(20);
+  textSize(28);
   playingNPC.display();
 }
 
@@ -166,8 +164,6 @@ function success() {
   image(bg_npc,0,0);
   
   //스크립트 디스플레이 공간
-  fill(0,150);
-  rect(width/2,height/2+350,width,height/3);
   fill(255);
   textSize(28);
   playingNPC.display();
@@ -178,9 +174,9 @@ function fail() {
 
   //스크립트 디스플레이 공간
   fill(0,150);
-  rect(width/2,height/2+350,width,height/3);
+  rect(width/2,height/2+350,width,height/3); //fail은 구현 전이라 아직 지우지는 않음
   fill(255);
-  textSize(20);
+  textSize(28);
   playingNPC.display();
 }
 
