@@ -23,7 +23,12 @@ class NPC {
     display() {
         if (this.mode == 0) {
             //게임 전 스크립트 진행
-            image(this.imageBasic, 280, 50);
+            this.imageBasic.resize(700,875);
+            image(this.imageBasic,width-860,height-940);
+            fill(0,150);
+            rect(width/2,height/2+350,width,height/3);
+
+            fill(255);
             text(scripts[this.num][this.mode][this.scriptPointer], width / 2, height / 2 + 310);
             let button = new Button(900, 950, 150, 50);
             if (this.scriptPointer < scripts[this.num][this.mode].length - 1) {
@@ -33,7 +38,12 @@ class NPC {
             }
             button.show();
         } else {
-            image(this.imageSuccess, 280, 50);
+            this.imageSuccess.resize(700,875);
+            image(this.imageSuccess,width-860,height-940);
+            fill(0,150);
+            rect(width/2,height/2+350,width,height/3);
+            
+            fill(255);
             text(scripts[this.num][this.mode][this.scriptPointer], width / 2, height / 2);
             let button = new Button(900, 950, 150, 50)
             if (this.scriptPointer < scripts[this.num][this.mode].length - 1) {
