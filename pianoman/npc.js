@@ -21,10 +21,9 @@ class NPC {
     }
 
     display() {
-        display() {
-            //스크립트 디스플레이 공간
-            fill(0,150);
-            rect(width/2,height/2+350,width,height/3);
+        //스크립트 디스플레이 공간
+        fill(0,150);
+        rect(width/2,height/2+350,width,height/3);
         if (this.mode == 0) {
             //게임 전 스크립트 진행
             text(scripts[this.num][this.mode][this.scriptPointer], width / 2, height / 2 + 310);
