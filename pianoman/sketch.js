@@ -101,27 +101,25 @@ function lobby() {
 
 
   let selectableNPC = nearNPCs();
+
   if (selectableNPC != -1) { //npc 근처에 있다면
     //TODO: 스트로크 표시
-    //지금은 rect로 대용
-  }
-
-  if (dist(plX, plY, 200, 200) < 40) { //npc 일정 반경 옆에 갔을 때
-    stroke(200,200,0);
-    strokeWeight(3); // npc 모양에 스트로크
-    rect(200,200,30,30); //각 npc이미지로 대체 필요
-
-  //npc 옆 글씨로 키 누를 것을 안내
+    //지금은 circle로 대체
     noStroke();
     fill(255);
-    textSize(10);
-    text("press shift", plX, plY + 20);
-
-  //쉬프트 누르면 스테이지 1로 이동
+    circle(NPC_position[selectableNPC][0], NPC_position[selectableNPC][1],30,30);
+    //npc 옆 글씨로 키 누를 것을 안내
+    textSize(30);
+    text("press shift", plX, plY - 20);
+    //쉬프트 누르면 스테이지 1로 이동
+    //여러번 호출되는 문제가 발생. 한 번만 호출되도록 수정 필요할 수도 있음.
     if (keyIsDown(SHIFT)){
       stage = 1;
-      }
+      console.log("triggered");
     }
+  }
+  
+
 
   //player 그리기 (추후 player image로 바꿔야 함)
   noStroke();
@@ -150,9 +148,6 @@ function nearNPCs() {
   }
   return -1;
 }
-
-
-
 
 
 function mouseClicked() {
