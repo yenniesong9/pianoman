@@ -13,21 +13,26 @@ let game;
 let song0;
 
 function preload() {
-  bg_image = loadImage('images/bg_image.jpg');
+  bg_main = loadImage("images/background/bg_main.png");
+  bg_npc = loadImage("images/background/bg_npc.jpg");
   song0 = loadSound('audio/birthday.mp3');
 }
 
 function setup() {
   //bg_image 크기에 맞는 캔버스 생성
-  bg_w = bg_image.width;
-  bg_h = bg_image.height;
+  console.log(bg_main.width, bg_main.height);
+  bg_w = bg_main.width;
+  bg_h = bg_main.height;
   createCanvas(bg_w, bg_h);
   game = new Game(0, song0);
 
 }
 
 function draw() {
-  background(220);
+  background(0);
+  image(bg_main, 0, 0);
+  noLoop();
+  //background(220);
   //image(bg_image, 0, 0);
   if (button) { //게임 실행
     game.display();
