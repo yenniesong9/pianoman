@@ -5,7 +5,14 @@ let notes0 = [[0, 0], [0, 0.5], [3, 1], [2, 2], [3, 3], [1, 4], [0, 5],
                 [0, 12], [0, 12.5], [3, 13], [2, 14], [2, 15], [1, 16], [0, 17], 
                 [3, 18], [3, 18.5], [2, 19], [0, 20], [1, 21], [0, 22]];
 
-let notes1 = [];
+let notes1 = [[0, 0], [0, 1], [1, 2], [2, 3], [3, 4], [3, 5], 
+                [2, 6], [1, 9], [2, 10], [3, 11], 
+                [2, 12], [2, 13], [2, 14], [0, 15], [3, 16], [1, 17.5], 
+                [2, 18], [2, 19], [1, 20], [1, 21], [0, 22], [1, 23], 
+                [2, 24], [3, 27], 
+                [0, 30], [1, 31], [2, 32], [3, 33], 
+                [3, 36], [2, 37], [2, 38], [1, 39], [0, 40], [1, 41], 
+                [1, 42], [1, 44], [2, 44.5], [3, 45]];
 let notes2 = [];
 let notes3 = [];
 let noteArr = [notes0, notes1, notes2, notes3];
@@ -15,8 +22,8 @@ let audioName = ["birthday.mp3", "", "", ""];
 let laneText = ["A", "S", "D", "F"];
 let lanePressed = [0, 0, 0, 0];
 
-let bpm = [500]; //한 박자 시간
-let startDelayArr = [3000]; //첫 노트가 나온 후 음악이 시작되기 까지의 시간
+let bpms = [500, 470]; //한 박자 시간
+let startDelayArr = [3000, 3000]; //첫 노트가 나온 후 음악이 시작되기 까지의 시간
 
 class Game {
 
@@ -26,7 +33,7 @@ class Game {
 
         //Note 오브젝트의 배열 생성
         this.notes = this.makeNoteArr(noteArr[num]); //플레이할 노트 목록 가져오기
-        this.bpm = bpm[num]; //박자 설정
+        this.bpm = bpms[this.num]; //박자 설정
 
         this.song = song; //음악 불러오기
         console.log(this.song);
@@ -67,7 +74,7 @@ class Game {
         let nextNote = this.notes[this.notePointer];
         //console.log(this.notePointer);
         //console.log(nextNote);
-        if (curTime - this.startTime > nextNote.timing*bpm) {
+        if (curTime - this.startTime > nextNote.timing*this.bpm) {
             //this.lastUpdatedTime = curTime;
             this.displayedNotes.push(nextNote);
             this.notePointer++;
