@@ -93,10 +93,6 @@ function draw() {
 function lobby() {
   image(bg_main,0,0);
 
-  //npc 위치와 모양 (1. npc.js에 추가해야할 듯 / 2. rect를 각 npc이미지로 대체 필요)
-  fill(200);
-  rect(200,200,30,30);
-
   //player 위치 조정
   if (isUpKeyPressed) {
     plY -= plSpeed;
@@ -128,9 +124,17 @@ function lobby() {
     noStroke();
     fill(255);
     circle(NPC_position[selectableNPC][0], NPC_position[selectableNPC][1],30,30);
+
+    //캐릭터 외곽선 따라 스트로크는 어려운 것 같고(물론 면담 때 질문 필요), 도형으로 스트로크 표시까지는 가능했음.
+    //스트로크 넣은 새로운 이미지 제작이 필요할 수도
+    /*noFill();
+    stroke(200,200,0);
+    strokeWeight(3);
+    rect(NPC_position[selectableNPC][0] + NPC_w/2, NPC_position[selectableNPC][1] + NPC_h/2, NPC_w, NPC_h);*/
+    
     //npc 옆 글씨로 키 누를 것을 안내
-    textSize(30);
-    text("press shift", plX+(NPC_w/2), plY - 20);
+    textSize(20);
+    text("shift를 눌러\n대화하기", plX+(NPC_w/2), plY - 30);
     //쉬프트 누르면 스테이지 1로 이동
     //여러번 호출되는 문제가 발생. 한 번만 호출되도록 수정 필요할 수도 있음.
     if (keyIsDown(SHIFT)){
@@ -141,12 +145,14 @@ function lobby() {
   }
 }
 
-function talk_npc(){ //사연공간 세부
+function talk_npc(){
   image(bg_npc,0,0);
+  
+  //npc 이미지
+  playingNPC.imageBasic.resize(700,875);
+  image(playingNPC.imageBasic,width-860,height-940);
 
   //스크립트 디스플레이 공간
-  fill(0,100);
-  rect(width/2,height/2+200,width,height/2);
   fill(255);
   textSize(20);
   playingNPC.display();
@@ -160,12 +166,17 @@ function rhythm(){
 
 function success() {
   image(bg_npc,0,0);
-
+  
+  //npc그림 이미지
+  image(bg_npc,0,0);
+  playingNPC.imageSuccess.resize(700,875);
+  image(playingNPC.imageSuccess,width-860,height-940);
+  
   //스크립트 디스플레이 공간
-  fill(0,100);
-  rect(width/2,height/2+200,width,height/2);
+  fill(0,150);
+  rect(width/2,height/2+350,width,height/3);
   fill(255);
-  textSize(20);
+  textSize(28);
   playingNPC.display();
 }
 
@@ -173,8 +184,8 @@ function fail() {
   image(bg_npc,0,0);
 
   //스크립트 디스플레이 공간
-  fill(0,100);
-  rect(width/2,height/2+200,width,height/2);
+  fill(0,150);
+  rect(width/2,height/2+350,width,height/3);
   fill(255);
   textSize(20);
   playingNPC.display();
