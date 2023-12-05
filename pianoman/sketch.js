@@ -36,6 +36,7 @@ let isDownKeyPressed = false;
 let isLeftKeyPressed = false;
 let isRightKeyPressed = false;
 
+
 function preload() {
   //이미지 불러오기
   bg_main = loadImage("images/background/bg_main.png");
@@ -90,6 +91,8 @@ function draw() {
   }
 }
 
+//--------------- 각 스테이지 별 함수들 -----------------//
+
 function lobby() {
   image(bg_main,0,0);
 
@@ -124,13 +127,6 @@ function lobby() {
     noStroke();
     fill(255);
     circle(NPC_position[selectableNPC][0], NPC_position[selectableNPC][1],30,30);
-
-    //캐릭터 외곽선 따라 스트로크는 어려운 것 같고(물론 면담 때 질문 필요), 도형으로 스트로크 표시까지는 가능했음.
-    //스트로크 넣은 새로운 이미지 제작이 필요할 수도
-    /*noFill();
-    stroke(200,200,0);
-    strokeWeight(3);
-    rect(NPC_position[selectableNPC][0] + NPC_w/2, NPC_position[selectableNPC][1] + NPC_h/2, NPC_w, NPC_h);*/
     
     //npc 옆 글씨로 키 누를 것을 안내
     textSize(20);
@@ -145,7 +141,7 @@ function lobby() {
   }
 }
 
-function talk_npc(){
+function talk_npc() {
   image(bg_npc,0,0);
 
   //스크립트 디스플레이 공간
@@ -154,7 +150,7 @@ function talk_npc(){
   playingNPC.display();
 }
 
-function rhythm(){
+function rhythm() {
   background(0);
   fill(255);
   playingGame.display();
@@ -180,8 +176,7 @@ function fail() {
   playingNPC.display();
 }
 
-
-//--------------- 각 함수 내부에서 추가적으로 사용되는 함수들 -----------------//
+//--------------- 함수 내부에서 추가적으로 사용되는 함수들 -----------------//
 
 function drawNPCs() {
   for (let i = 0; i < NPC_count; i++) {
@@ -205,8 +200,6 @@ function nearNPCs() {
   }
   return -1;
 }
-
-
 
 //--------------- 외부 입력과 관련된 함수들 -----------------//
 
@@ -245,7 +238,6 @@ function mouseClicked() {
     }
   }
 }
-
 
 function keyPressed() {
   //게임
