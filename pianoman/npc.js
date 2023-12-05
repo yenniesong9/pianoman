@@ -38,13 +38,18 @@ class NPC {
             }
             button.show();
         } else {
-            this.imageSuccess.resize(700,875);
-            image(this.imageSuccess,width-860,height-940);
+            if (this.mode == 1) {
+                this.imageSuccess.resize(700,875);
+                image(this.imageSuccess,width-860,height-940);
+            } else {
+                this.imageBasic.resize(700,875);
+                image(this.imageBasic,width-860,height-940);
+            }
             fill(0,150);
             rect(width/2,height/2+350,width,height/3);
             
             fill(255);
-            text(scripts[this.num][this.mode][this.scriptPointer], width / 2, height / 2);
+            text(scripts[this.num][this.mode][this.scriptPointer], width / 2, height / 2 + 310);
             let button = new Button(900, 950, 150, 50)
             if (this.scriptPointer < scripts[this.num][this.mode].length - 1) {
                 button.setTitle("다음으로");

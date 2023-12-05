@@ -130,13 +130,14 @@ class Game {
             } else {
                 //게임 종료 화면
                 fill(255, 0, 0);
-                rect(0, 0, width, height);
+                rectMode(CENTER)
+                rect(500, 500, 1024, 1024);
                 textSize(100);
                 fill(0);
                 if (this.hit/this.notes.length > 0.8) {
-                    text("Success!", 300, 500);
+                    text("Success!", 500, 500);
                 } else {
-                    text("Game Over", 300, 500);   
+                    text("Game Over", 500, 500);   
                 }
                 fill(255);
                 rect(500, 700, 200, 100);
