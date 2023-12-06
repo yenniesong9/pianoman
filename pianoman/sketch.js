@@ -56,7 +56,7 @@ function preload() {
   playerPng = loadImage('images/NPC/주인공 3인칭(기본).png');
 
   //음악 불러오기
-  song0 = loadSound('audio/birthday.mp3');
+  song0 = loadSound('audio/hbdhard2.mp3');
   song1 = loadSound('audio/okdal.mp3');
 }
 
