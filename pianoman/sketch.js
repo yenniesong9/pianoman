@@ -2,9 +2,10 @@
 let bg_main;
 let bg_npc;
 let bg_w, bg_h;
+let key_up, key_down, key_left, key_right;
+let pixelFont;
 
 let stage = 0; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
-
 
 let NPC_count = 3; //TODO: 향후 수정 필요
 let NPCs = []; //NPC 객체들을 담을 배열
@@ -26,8 +27,8 @@ let song0;
 let button = 0;
 
 //player
-let plX = 200;
-let plY = 200;
+let plX = 525;
+let plY = 860;
 let plSpeed = 3;
 let playerPng;
 
@@ -40,7 +41,14 @@ function preload() {
   //이미지 불러오기
   bg_main = loadImage("images/background/bg_main.png");
   bg_npc = loadImage("images/background/bg_npc.jpg");
+  pixelFont = loadFont("font/DungGeunMo.ttf");
 
+  key_default = loadImage('images/background/방향키.png');
+  key_up = loadImage("images/background/방향키(상).png");
+  key_down = loadImage("images/background/방향키(하).png");
+  key_left = loadImage("images/background/방향키(좌).png");
+  key_right = loadImage("images/background/방향키(우).png");
+  key_shift = loadImage("images/background/shift키.png")
   for (let i = 0; i < NPC_count; i++) {
     console.log(i);
     let title = 'images/NPC/손님' + (i+1) + ' 3인칭(기본).png'
@@ -70,7 +78,7 @@ function setup() {
   //mode 초기화
   rectMode(CENTER);
   textAlign(CENTER);
-
+  textFont(pixelFont);
   //game 미리 생성 (임시)
   games[0] = new Game(0, song0);
   games[1] = new Game(1, song1);
@@ -94,19 +102,29 @@ function draw() {
 
 function lobby() {
   image(bg_main,0,0);
+  key_default.resize(250,250);
+  image(key_default,760,800);
 
   //player 위치 조정
   if (isUpKeyPressed) {
     plY -= plSpeed;
+    key_up.resize(250,250);
+    image(key_up,760,800);
   }
   if (isDownKeyPressed) {
     plY += plSpeed;
+    key_down.resize(250,250);
+    image(key_down,760,800);
   }
   if (isLeftKeyPressed) {
     plX -= plSpeed;
+    key_left.resize(250,250);
+    image(key_left,760,800);
   }
   if (isRightKeyPressed) {
     plX += plSpeed;
+    key_right.resize(250,250);
+    image(key_right,760,800);
   }
 
   //위치 제한 추후 수정 필요
@@ -128,8 +146,8 @@ function lobby() {
     circle(NPC_position[selectableNPC][0], NPC_position[selectableNPC][1],30,30);
     
     //npc 옆 글씨로 키 누를 것을 안내
-    textSize(20);
-    text("shift를 눌러\n대화하기", plX+(NPC_w/2), plY - 30);
+    key_shift.resize(100, 50);
+    image(key_shift,plX, plY - 45);
     //쉬프트 누르면 스테이지 1로 이동
     //여러번 호출되는 문제가 발생. 한 번만 호출되도록 수정 필요할 수도 있음.
     if (keyIsDown(SHIFT)){
