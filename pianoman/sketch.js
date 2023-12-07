@@ -113,7 +113,7 @@ function lobby() {
   plX = constrain(plX, 150, width-150);
   plY = constrain(plY, 150, height-150);
 
-  //player 그리기
+  //npc, player 그리기
   drawNPCs();
   drawPlayer();
 
