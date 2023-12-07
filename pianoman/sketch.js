@@ -3,6 +3,7 @@ let bg_main;
 let bg_npc;
 let bg_w, bg_h;
 let key_up, key_down, key_left, key_right;
+let pixelFont;
 
 let stage = 0; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
 
@@ -26,8 +27,8 @@ let song0;
 let button = 0;
 
 //player
-let plX = 200;
-let plY = 200;
+let plX = 525;
+let plY = 860;
 let plSpeed = 3;
 let playerPng;
 
@@ -40,11 +41,14 @@ function preload() {
   //이미지 불러오기
   bg_main = loadImage("images/background/bg_main.png");
   bg_npc = loadImage("images/background/bg_npc.jpg");
+  pixelFont = loadFont("font/DungGeunMo.ttf");
+
+  key_default = loadImage('images/background/방향키.png');
   key_up = loadImage("images/background/방향키(상).png");
   key_down = loadImage("images/background/방향키(하).png");
   key_left = loadImage("images/background/방향키(좌).png");
   key_right = loadImage("images/background/방향키(우).png");
-
+  key_shift = loadImage("images/background/shift키.png")
   for (let i = 0; i < NPC_count; i++) {
     console.log(i);
     let title = 'images/NPC/손님' + (i+1) + ' 3인칭(기본).png'
@@ -74,7 +78,7 @@ function setup() {
   //mode 초기화
   rectMode(CENTER);
   textAlign(CENTER);
-
+  textFont(pixelFont);
   //game 미리 생성 (임시)
   games[0] = new Game(0, song0);
   games[1] = new Game(1, song1);
@@ -98,55 +102,38 @@ function draw() {
 
 function lobby() {
   image(bg_main,0,0);
-  //let piano = loadImage("images/background/오브젝트5(피아노+의자).png");
-  //image(piano,300,300);
-  
+  key_default.resize(250,250);
+  image(key_default,760,800);
+
   //player 위치 조정
   if (isUpKeyPressed) {
     plY -= plSpeed;
-    image(key_up,800,800);
+    key_up.resize(250,250);
+    image(key_up,760,800);
   }
   if (isDownKeyPressed) {
     plY += plSpeed;
-    image(key_down,800,800);
+    key_down.resize(250,250);
+    image(key_down,760,800);
   }
   if (isLeftKeyPressed) {
     plX -= plSpeed;
-    image(key_left,800,800);
+    key_left.resize(250,250);
+    image(key_left,760,800);
   }
   if (isRightKeyPressed) {
     plX += plSpeed;
-    image(key_right,800,800);
+    key_right.resize(250,250);
+    image(key_right,760,800);
   }
 
   //위치 제한 추후 수정 필요
   plX = constrain(plX, 150, width-150);
   plY = constrain(plY, 150, height-150);
 
-  rect(470,600,240,190);
-  if (
-    plX < 470 &&
-    plX > 470 - 240 &&
-    plY < 600 + 190/2 &&
-    plY > 600 - 190/2
-  ) {
-    // Reset rectangle position if there is a collision
-    plX = 470 - 240;
-  }
-  if (
-    plX < 470 + 240/2 &&
-    plX >= 470 &&
-    plY < 600 + 190/2 &&
-    plY > 600 - 190/2
-  ) {
-    // Reset rectangle position if there is a collision
-    plX = 470 + 240/2;
-  }
-
   //npc, player 그리기
   drawNPCs();
   drawPlayer();
-}
 
 
   let selectableNPC = nearNPCs();
@@ -159,10 +146,8 @@ function lobby() {
     circle(NPC_position[selectableNPC][0], NPC_position[selectableNPC][1],30,30);
     
     //npc 옆 글씨로 키 누를 것을 안내
-    //let shift = loadImage("images/background/shift키");
-    //image(shift, plX+(NPC_w/2), plY - 30);
-    textSize(20);
-    text("shift를 눌러\n대화하기", plX+(NPC_w/2), plY - 30);
+    key_shift.resize(100, 50);
+    image(key_shift,plX, plY - 45);
     //쉬프트 누르면 스테이지 1로 이동
     //여러번 호출되는 문제가 발생. 한 번만 호출되도록 수정 필요할 수도 있음.
     if (keyIsDown(SHIFT)){
@@ -171,6 +156,7 @@ function lobby() {
       console.log("selectabel num: " , selectableNPC);
     }
   }
+}
 
 function talk_npc(){
   image(bg_npc,0,0);
@@ -233,39 +219,6 @@ function nearNPCs() {
   return -1;
 }
 
-/*class Obstacle{
-  constructor(x,y,w,h){
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-  }
-  display(){
-    fill(255);
-    rect(this.x, this.y, this.w, this.h);
-  }
-  constrain(){
-    if (
-      plX < this.x &&
-      plX > this.x - this.w &&
-      plY < this.y + this.h &&
-      plY > this.y - this.h
-    ) {
-      // Reset rectangle position if there is a collision
-      plX = this.x - this.w;
-    }
-    if (
-      plX < this.x + this.w &&
-      plX >= this.x &&
-      plY < this.y + this.h &&
-      plY > this.y - this.h
-    ) {
-      // Reset rectangle position if there is a collision
-      plX = this.x + this.w/2;
-    }
-  }
-}
-*/
 
 
 //--------------- 외부 입력과 관련된 함수들 -----------------//
