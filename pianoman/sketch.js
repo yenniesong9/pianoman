@@ -6,7 +6,7 @@ let bg_w, bg_h;
 let stage = 0; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
 
 
-let NPC_count = 2; //TODO: 향후 수정 필요
+let NPC_count = 3; //TODO: 향후 수정 필요
 let NPCs = []; //NPC 객체들을 담을 배열
 let NPC_completed, NPC_tried = [0, 0, 0, 0]; //성공하면 1로 바뀌는 배열
 let success_count = 0;
@@ -15,7 +15,7 @@ let playingNPC;
 
 //lobby에 표시하는 용
 let NPC_pngs = []; //npc 이미지 저장
-let NPC_position = [[310, 330], [585, 350], [0, 0], [0, 0]]; //npc 위치 저장
+let NPC_position = [[310, 330], [585, 350], [780, 470], [0, 0]]; //npc 위치 저장
 let NPC_w = 100; //화면에 표시하는 크기
 let NPC_h = 130;
 
@@ -74,6 +74,7 @@ function setup() {
   //game 미리 생성 (임시)
   games[0] = new Game(0, song0);
   games[1] = new Game(1, song1);
+  //games[2] = new Game(2, song2);
 }
 
 function draw() {
@@ -125,13 +126,6 @@ function lobby() {
     noStroke();
     fill(255);
     circle(NPC_position[selectableNPC][0], NPC_position[selectableNPC][1],30,30);
-
-    //캐릭터 외곽선 따라 스트로크는 어려운 것 같고(물론 면담 때 질문 필요), 도형으로 스트로크 표시까지는 가능했음.
-    //스트로크 넣은 새로운 이미지 제작이 필요할 수도
-    /*noFill();
-    stroke(200,200,0);
-    strokeWeight(3);
-    rect(NPC_position[selectableNPC][0] + NPC_w/2, NPC_position[selectableNPC][1] + NPC_h/2, NPC_w, NPC_h);*/
     
     //npc 옆 글씨로 키 누를 것을 안내
     textSize(20);
