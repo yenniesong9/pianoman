@@ -58,7 +58,7 @@ function preload() {
   //음악 불러오기
   song0 = loadSound('audio/hbdhard2.mp3');
   song1 = loadSound('audio/okdal.mp3');
-  song2 = loadSound('audio/memories.mp3');
+  //song2 = loadSound('audio/memories.mp3');
 }
 
 function setup() {
@@ -113,8 +113,8 @@ function lobby() {
   plY = constrain(plY, 150, height-150);
 
   //player 그리기
-  drawPlayer();
   drawNPCs();
+  drawPlayer();
 
 
   let selectableNPC = nearNPCs();
