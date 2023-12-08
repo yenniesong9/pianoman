@@ -5,8 +5,10 @@ let bg_w, bg_h;
 let key_up, key_down, key_left, key_right;
 let pixelFont;
 
+///스테이지 구분
 let stage = 0; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
 
+///NPC 관련 변수
 let NPC_count = 3; //TODO: 향후 수정 필요
 let NPCs = []; //NPC 객체들을 담을 배열
 let NPC_completed, NPC_tried = [0, 0, 0, 0]; //성공하면 1로 바뀌는 배열
@@ -19,6 +21,7 @@ let NPC_pngs = []; //npc 이미지 저장
 let NPC_position = [[310, 330], [585, 350], [780, 470], [0, 0]]; //npc 위치 저장
 let NPC_w = 100; //화면에 표시하는 크기
 let NPC_h = 130;
+let piano;
 
 
 let games = [];
@@ -48,7 +51,11 @@ function preload() {
   key_down = loadImage("images/background/방향키(하).png");
   key_left = loadImage("images/background/방향키(좌).png");
   key_right = loadImage("images/background/방향키(우).png");
-  key_shift = loadImage("images/background/shift키.png")
+  key_shift = loadImage("images/background/shift키.png");
+
+  piano = loadImage('images/background/오브젝트5(피아노).png');
+  pianobottom = loadImage('images/background/오브젝트5-1(의자).png');
+
   for (let i = 0; i < NPC_count; i++) {
     console.log(i);
     let title = 'images/NPC/손님' + (i+1) + ' 3인칭(기본).png'
@@ -105,7 +112,7 @@ function lobby() {
   key_default.resize(250,250);
   image(key_default,760,800);
 
-  //player 위치 조정
+  //player 위치 조정 & 방향키 누름 표시
   if (isUpKeyPressed) {
     plY -= plSpeed;
     key_up.resize(250,250);
@@ -127,14 +134,37 @@ function lobby() {
     image(key_right,760,800);
   }
 
-  //위치 제한 추후 수정 필요
+  ///////////////////위치 제한
+  //벽
   plX = constrain(plX, 150, width-150);
   plY = constrain(plY, 150, height-150);
+  pianobottom.resize(300-20, 290-5)
+  
+  //피아노
+  image(pianobottom,320,475);
+  if (
+    plX < 320 + pianobottom.width/2 && plX > 320 - 10 - NPC_w/2 &&
+    plY < 475 + pianobottom.height - NPC_h + 10 && plY > 475 - NPC_h/2
+    ) {
+    // 부딪히면 x좌표 재지정
+    plX = 320 - 10 - NPC_w/2;
+    } else if (
+    plX < 320 + 10 + pianobottom.width - NPC_w/2 && plX >= 320 + pianobottom.width/2 &&
+    plY < 475 + pianobottom.height - NPC_h + 10 && plY > 475 - NPC_h/2
+    ) {
+    // 부딪히면 x좌표 재지정
+    plX = 320 + 10 + pianobottom.width - NPC_w/2
+    }
 
+  ///빅식물
+  ///미니식물
+  
   //npc, player 그리기
   drawNPCs();
   drawPlayer();
 
+  piano.resize(300-20, 290-5);
+  image(piano,320,475);
 
   let selectableNPC = nearNPCs();
 
