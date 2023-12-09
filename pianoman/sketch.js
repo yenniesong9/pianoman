@@ -154,31 +154,31 @@ function lobby() {
   image(minitable,180,290);
   if (
     plX < 180 + minitable.width/2 && plX > 180 - 20 &&
-    plY < 290 - 20 + minitable.height - NPC_h && plY > 290 - 10 - NPC_h/2
+    plY < 290 - 20 + minitable.height - NPC_h && plY > 290 - NPC_h/2
     ) {
       isRightKeyPressed = false; // 부딪히면 방향키 비활성화
       isDownKeyPressed = false;
       isUpKeyPressed = false;
     } else if (
     plX < 180 + minitable.width - NPC_w && plX >= 180 + minitable.width/2 &&
-    plY < 290 + minitable.height - NPC_h - 20 && plY > 290 - 10 - NPC_h/2
+    plY < 290 + minitable.height - NPC_h - 20 && plY > 290 - NPC_h/2
     ) {
       isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
       isDownKeyPressed = false;
       isUpKeyPressed = false;
     }
 
-  //테이블
+  //큰테이블
   image(table,410,365);
   if (
-    plX < 410 + table.width/2 && plX > 410 - 20 - NPC_w/2 &&
-    plY < 365 + table.height - NPC_h + 10 && plY > 365 - 105
+    plX < 410 + table.width/2 && plX > 410 - NPC_w/2 &&
+    plY < 365 + table.height - NPC_h + 10 && plY > 365 - 100
     ) {
       isRightKeyPressed = false; // 부딪히면 방향키 비활성화
       isDownKeyPressed = false;
     } else if (
     plX < 410 + 20 + table.width - NPC_w/2 && plX >= 410 + table.width/2 &&
-    plY < 365 + table.height - NPC_h + 10 && plY > 365 - 105
+    plY < 365 + table.height - NPC_h + 10 && plY > 365 - 100
     ) {
       isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
       isDownKeyPressed = false;
@@ -222,6 +222,7 @@ function lobby() {
   if (plX > 690 && plX < 690 + smallplant.width/2 && plY > 650) plY = 650;
   else if (plX >= 690 + smallplant.width/2 &&
   plX < 690 + smallplant.width && plY > 650) plX = plX;
+  
 
   //--------------------------------------------------------------//
 
