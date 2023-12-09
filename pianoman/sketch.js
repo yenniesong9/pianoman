@@ -18,11 +18,9 @@ let playingNPC;
 
 //lobby에 표시하는 용
 let NPC_pngs = []; //npc 이미지 저장
-let NPC_position = [[310, 330], [585, 350], [780, 470], [0, 0]]; //npc 위치 저장
+let NPC_position = [[260, 330], [640, 250], [780, 470], [0, 0]]; //npc 위치 저장
 let NPC_w = 100; //화면에 표시하는 크기
 let NPC_h = 130;
-let piano;
-
 
 let games = [];
 let playingGame;
@@ -55,6 +53,13 @@ function preload() {
 
   piano = loadImage('images/background/오브젝트5(피아노).png');
   pianobottom = loadImage('images/background/오브젝트5-1(의자).png');
+  bigplant = loadImage('images/background/오브젝트4(빅식물).png');
+  bigplanttop = loadImage('images/background/오브젝트4-1(빅식물).png');
+  smallplant = loadImage('images/background/오브젝트3(미니식물).png');
+  table = loadImage('images/background/오브젝트2(테이블).png');
+  tabletop = loadImage('images/background/오브젝트2-1(테이블윗부분).png');
+  minitable = loadImage('images/background/오브젝트6(미니테이블).png');
+  shelf = loadImage('images/background/오브젝트7-1(선반윗부분).png')
 
   for (let i = 0; i < NPC_count; i++) {
     console.log(i);
@@ -91,6 +96,7 @@ function setup() {
   games[0] = new Game(0, song0);
   games[1] = new Game(1, song1);
   //games[2] = new Game(2, song2);
+  //games[3] = new Game(3, song3);
 }
 
 function draw() {
@@ -137,35 +143,96 @@ function lobby() {
 
   ///////////////////위치 제한
   //벽
-  plX = constrain(plX, 150, width-150);
-  plY = constrain(plY, 150, height-150);
-  pianobottom.resize(300-20, 290-5)
+  plX = constrain(plX, 150, width-200);
+  plY = constrain(plY, 60, height-150);
+
+  if(plX< 700 && plX>400 && plY<150 && plY>100){
+    isDownKeyPressed = false;
+  }
   
+  //미니테이블
+  image(minitable,180,290);
+  if (
+    plX < 180 + minitable.width/2 && plX > 180 - 20 &&
+    plY < 290 + minitable.height - NPC_h - 20 && plY > 290 - 10 - NPC_h/2
+    ) {
+      isRightKeyPressed = false; // 부딪히면 방향키 비활성화
+      isDownKeyPressed = false;
+      isUpKeyPressed = false;
+    } else if (
+    plX < 180 + minitable.width - NPC_w && plX >= 180 + minitable.width/2 &&
+    plY < 290 + minitable.height - NPC_h - 20 && plY > 290 - 10 - NPC_h/2
+    ) {
+      isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
+      isDownKeyPressed = false;
+      isUpKeyPressed = false;
+    }
+  //테이블
+  image(table,410,365);
+  if (
+    plX < 410 + table.width/2 && plX > 410 - 20 - NPC_w/2 &&
+    plY < 365 + table.height - NPC_h + 10 && plY > 365 - 105
+    ) {
+      isRightKeyPressed = false; // 부딪히면 방향키 비활성화
+      isDownKeyPressed = false;
+    } else if (
+    plX < 410 + 20 + table.width - NPC_w/2 && plX >= 410 + table.width/2 &&
+    plY < 365 + table.height - NPC_h + 10 && plY > 365 - 105
+    ) {
+      isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
+      isDownKeyPressed = false;
+    }
   //피아노
+  pianobottom.resize(300-20, 290-5)
   image(pianobottom,320,475);
   if (
     plX < 320 + pianobottom.width/2 && plX > 320 - 10 - NPC_w/2 &&
     plY < 475 + pianobottom.height - NPC_h + 10 && plY > 475 - NPC_h/2
     ) {
-    // 부딪히면 x좌표 재지정
-    plX = 320 - 10 - NPC_w/2;
+      isRightKeyPressed = false; // 부딪히면 방향키 비활성화
+      isUpKeyPressed = false;
+      //isDownKeyPressed = false;
+      //plY = 475 - NPC_h/2; // 부딪히면 좌표 재지정
     } else if (
     plX < 320 + 10 + pianobottom.width - NPC_w/2 && plX >= 320 + pianobottom.width/2 &&
     plY < 475 + pianobottom.height - NPC_h + 10 && plY > 475 - NPC_h/2
     ) {
-    // 부딪히면 x좌표 재지정
-    plX = 320 + 10 + pianobottom.width - NPC_w/2
+      isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
+      isUpKeyPressed = false;
+      //isDownKeyPressed = false;
+      //plX = 320 + 10 + pianobottom.width - NPC_w/2  // 부딪히면 좌표 재지정
     }
-
-  ///빅식물
+  //빅식물
+  image(bigplant,716,368);
+  if (plX > 716 - NPC_w/3 && plX < 716 + bigplant.width &&
+  plY > 368 && plY < 368 + bigplant.height/2 - NPC_h/2){
+    isRightKeyPressed = false;
+    plY = 368;
+  } else if (plX > 716 - NPC_w/3 && plX < 716 + bigplant.width &&
+    plY >= 368 + bigplant.height/2 - NPC_h/2 &&
+    plY < 368 + bigplant.height - NPC_h/2){
+    plY = 368 + bigplant.height - NPC_h/2;
+    }
   ///미니식물
+  image(smallplant,690,650);
+  if (plX > 690 && plX < 690 + smallplant.width/2 && plY > 650) plY = 650;
+  else if (plX >= 690 + smallplant.width/2 &&
+  plX < 690 + smallplant.width && plY > 650) plX = plX;
   
-  //npc, player 그리기
+  //npc 그리기
   drawNPCs();
+  //player 그리기
   drawPlayer();
 
+  //player가 밑으로 지나가야 하는 오브젝트 모음
   piano.resize(300-20, 290-5);
+  shelf.resize(94-5, 204-5);
   image(piano,320,475);
+  image(bigplanttop,716,368);
+  image(smallplant,690,650);
+  image(shelf,570,179);
+  //image(tabletop,410,365);
+  
 
   let selectableNPC = nearNPCs();
 
