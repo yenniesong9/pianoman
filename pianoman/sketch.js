@@ -9,7 +9,7 @@ let pixelFont;
 let stage = 0; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
 
 ///NPC 관련 변수
-let NPC_count = 3; //TODO: 향후 수정 필요
+let NPC_count = 4; //TODO: 향후 수정 필요
 let NPCs = []; //NPC 객체들을 담을 배열
 let NPC_completed, NPC_tried = [0, 0, 0, 0]; //성공하면 1로 바뀌는 배열
 let success_count = 0;
@@ -18,7 +18,7 @@ let playingNPC;
 
 //lobby에 표시하는 용
 let NPC_pngs = []; //npc 이미지 저장
-let NPC_position = [[260, 330], [640, 250], [780, 470], [0, 0]]; //npc 위치 저장
+let NPC_position = [[260, 330], [640, 250], [780, 470], [180,650]]; //npc 위치 저장
 let NPC_w = 100; //화면에 표시하는 크기
 let NPC_h = 130;
 
@@ -61,6 +61,10 @@ function preload() {
   minitable = loadImage('images/background/오브젝트6(미니테이블).png');
   shelf = loadImage('images/background/오브젝트7-1(선반윗부분).png');
 
+  imageScript = loadImage('images/button/대화창높음.png');
+  buttonDefault = loadImage('images/button/대화창버튼기본.png');
+  buttonClick = loadImage('images/button/대화창버튼눌림.png')
+  
   for (let i = 0; i < NPC_count; i++) {
     console.log(i);
     let title = 'images/NPC/손님' + (i+1) + ' 3인칭(기본).png'
@@ -90,7 +94,7 @@ function setup() {
 
   //mode 초기화
   rectMode(CENTER);
-  textAlign(CENTER);
+  textAlign(CENTER, CENTER);
   textFont(pixelFont);
   //game 미리 생성 (임시)
   games[0] = new Game(0, song0);
@@ -222,7 +226,6 @@ function lobby() {
   if (plX > 690 && plX < 690 + smallplant.width/2 && plY > 650) plY = 650;
   else if (plX >= 690 + smallplant.width/2 &&
   plX < 690 + smallplant.width && plY > 650) plX = plX;
-  
 
   //--------------------------------------------------------------//
 
@@ -291,8 +294,6 @@ function fail() {
   image(bg_npc,0,0);
 
   //스크립트 디스플레이 공간
-  fill(0,150);
-  rect(width/2,height/2+350,width,height/3); //fail은 구현 전이라 아직 지우지는 않음
   fill(255);
   textSize(28);
   playingNPC.display();
@@ -332,7 +333,13 @@ function mouseClicked() {
   console.log(mouseX, mouseY); //좌표 확인 용
 
   if (stage == 1 || stage == 3 || stage == 4) { //스크립트 플레이
-    if (mouseX > 825 && mouseX < 975 && mouseY > 875 && mouseY < 975) {
+    if (mouseX > 635 && mouseX < 785 && mouseY > 882 && mouseY < 957){
+      if (playingNPC.isPlayable()) {
+      console.log("return to lobby");
+      playingNPC.scriptPointer = 0;
+      stage = 0;
+      }
+    } else if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
       if (playingNPC.isPlayable()) {
         playingGame = games[playingNPC.num];
         console.log("playing NPC num here: ", playingNPC.num);

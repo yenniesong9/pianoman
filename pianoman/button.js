@@ -1,28 +1,27 @@
 class Button {
-    constructor(x, y, w, h) {
+    constructor(x, y) {
       this.x = x;
       this.y = y;
-      this.w = w;
-      this.h = h;
+      this.w = 150;
+      this.h = 75;
+      this.default = buttonDefault;
+      this.click = buttonClick;
       this.title = "untitle";
     }
     over() {
-      rectMode(CENTER)
-      if (this.x - this.w/2 < mouseX && mouseX < this.x +this.w/2 
-      && this.y - this.h/2< mouseY && mouseY < this.y + this.h/2) {
+      if (this.x < mouseX && mouseX < this.x + this.w 
+      && this.y < mouseY && mouseY < this.y + this.h) {
         return true;
       } else {
         return false;
       }
     }
     show() {
-      if (this.over()) fill(255, 0, 0);
-      else fill(255, 200, 200);
-      rect(this.x, this.y, this.w, this.h);
-      textAlign(CENTER, CENTER);
+      if (this.over()) image(this.click, this.x, this.y);
+      else image(this.default, this.x, this.y);
       fill(20);
       textSize(16);
-      text(this.title, this.x, this.y);
+      text(this.title, this.x + this.default.width/2, this.y + this.default.height/2-2);
     }
     setTitle(title) {
       this.title = title;
