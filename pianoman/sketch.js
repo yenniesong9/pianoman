@@ -141,7 +141,7 @@ function lobby() {
     image(key_right,760,800);
   }
 
-  ///////////////////위치 제한
+  //-------------------------위치 제한-----------------------//
   //벽
   plX = constrain(plX, 150, width-200);
   plY = constrain(plY, 60, height-150);
@@ -167,6 +167,7 @@ function lobby() {
       isDownKeyPressed = false;
       isUpKeyPressed = false;
     }
+
   //테이블
   image(table,410,365);
   if (
@@ -182,6 +183,7 @@ function lobby() {
       isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
       isDownKeyPressed = false;
     }
+
   //피아노
   pianobottom.resize(300-20, 290-5)
   image(pianobottom,320,475);
@@ -202,6 +204,7 @@ function lobby() {
       //isDownKeyPressed = false;
       //plX = 320 + 10 + pianobottom.width - NPC_w/2  // 부딪히면 좌표 재지정
     }
+
   //빅식물
   image(bigplant,716,368);
   if (plX > 716 - NPC_w/3 && plX < 716 + bigplant.width &&
@@ -213,12 +216,15 @@ function lobby() {
     plY < 368 + bigplant.height - NPC_h/2){
     plY = 368 + bigplant.height - NPC_h/2;
     }
+
   ///미니식물
   image(smallplant,690,650);
   if (plX > 690 && plX < 690 + smallplant.width/2 && plY > 650) plY = 650;
   else if (plX >= 690 + smallplant.width/2 &&
   plX < 690 + smallplant.width && plY > 650) plX = plX;
   
+  //--------------------------------------------------//
+
   //npc 그리기
   drawNPCs();
   //player 그리기
