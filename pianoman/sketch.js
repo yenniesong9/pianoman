@@ -82,8 +82,8 @@ function preload() {
   //음악 불러오기
   song0 = loadSound('audio/hbdhard2.mp3');
   song1 = loadSound('audio/stnc.mp3');
-  //song2 = loadSound('audio/memories.mp3');
-  //song3 = loadSound('audio/jinglebell.mp3')
+  song2 = loadSound('audio/memories1.mp3');
+  song3 = loadSound('audio/jinglebell.mp3');
 }
 
 function setup() {
@@ -99,8 +99,8 @@ function setup() {
   //game 미리 생성 (임시)
   games[0] = new Game(0, song0);
   games[1] = new Game(1, song1);
-  //games[2] = new Game(2, song2);
-  //games[3] = new Game(3, song3);
+  games[2] = new Game(2, song2);
+  games[3] = new Game(3, song3);
 }
 
 function draw() {
