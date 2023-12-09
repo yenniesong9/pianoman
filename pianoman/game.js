@@ -57,8 +57,8 @@ let audioName = ["birthday.mp3", "", "", ""];
 let laneText = ["A", "S", "D", "F"];
 let lanePressed = [0, 0, 0, 0];
 
-let bpms = [500, 470]; //한 박자 시간
-let startDelayArr = [3000, 3000]; //첫 노트가 나온 후 음악이 시작되기 까지의 시간
+let bpms = [500, 470, 466, 458]; //한 박자 시간
+let startDelayArr = [3000, 3000, 3000, 3000]; //첫 노트가 나온 후 음악이 시작되기 까지의 시간
 
 class Game {
 
