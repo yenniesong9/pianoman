@@ -51,15 +51,15 @@ function preload() {
   key_right = loadImage("images/background/방향키(우).png");
   key_shift = loadImage("images/background/shift키.png");
 
-  piano = loadImage('images/background/오브젝트5(피아노).png');
-  pianobottom = loadImage('images/background/오브젝트5-1(의자).png');
-  bigplant = loadImage('images/background/오브젝트4(빅식물).png');
-  bigplanttop = loadImage('images/background/오브젝트4-1(빅식물).png');
-  smallplant = loadImage('images/background/오브젝트3(미니식물).png');
   table = loadImage('images/background/오브젝트2(테이블).png');
   tabletop = loadImage('images/background/오브젝트2-1(테이블윗부분).png');
+  smallplant = loadImage('images/background/오브젝트3(미니식물).png');
+  bigplant = loadImage('images/background/오브젝트4(빅식물).png');
+  bigplanttop = loadImage('images/background/오브젝트4-1(빅식물).png');
+  piano = loadImage('images/background/오브젝트5(피아노).png');
+  pianobottom = loadImage('images/background/오브젝트5-1(의자).png');
   minitable = loadImage('images/background/오브젝트6(미니테이블).png');
-  shelf = loadImage('images/background/오브젝트7-1(선반윗부분).png')
+  shelf = loadImage('images/background/오브젝트7-1(선반윗부분).png');
 
   for (let i = 0; i < NPC_count; i++) {
     console.log(i);
@@ -146,7 +146,7 @@ function lobby() {
   plX = constrain(plX, 150, width-200);
   plY = constrain(plY, 60, height-150);
 
-  if(plX< 700 && plX>400 && plY<150 && plY>100){
+  if(plX < 700 && plX > 400 && plY < 150 && plY > 100){
     isDownKeyPressed = false;
   }
   
@@ -154,7 +154,7 @@ function lobby() {
   image(minitable,180,290);
   if (
     plX < 180 + minitable.width/2 && plX > 180 - 20 &&
-    plY < 290 + minitable.height - NPC_h - 20 && plY > 290 - 10 - NPC_h/2
+    plY < 290 - 20 + minitable.height - NPC_h && plY > 290 - 10 - NPC_h/2
     ) {
       isRightKeyPressed = false; // 부딪히면 방향키 비활성화
       isDownKeyPressed = false;
@@ -222,8 +222,8 @@ function lobby() {
   if (plX > 690 && plX < 690 + smallplant.width/2 && plY > 650) plY = 650;
   else if (plX >= 690 + smallplant.width/2 &&
   plX < 690 + smallplant.width && plY > 650) plX = plX;
-  
-  //--------------------------------------------------//
+
+  //--------------------------------------------------------------//
 
   //npc 그리기
   drawNPCs();
