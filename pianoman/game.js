@@ -52,7 +52,7 @@ let notes3 = [[3,0],[3,0.75],[1,1],[2,2],[2,2.75],[0,3],[0,4],[3,3.75],[2,5],[1,
 ]; //npc4 -jinglebell
 
 let noteArr = [notes0, notes1, notes2, notes3];
-let songNameArr = ["Happy Birthday", "Something never change", "Memories", "Jingle Bell"]
+let songNameArr = ["Happy Birthday", "Something Never Change", "Memories", "Jingle Bell"]
 let levelArr = ["★", "★★", "★★★", "★★★★"]
 
 let laneText = ["D", "F", "J", "K"];
@@ -183,7 +183,7 @@ class Game {
                 if (this.hit/this.notes.length > 0.8) {
                     text("Success!", width/2, 400);
                 } else {
-                    text("Game Over", width/2, 400);   
+                    text("Failed...", width/2, 400);   
                 }
                 fill(255);
                 rect(500, 600, 200, 100);
@@ -193,11 +193,15 @@ class Game {
             }
         } else {
             //게임 시작
-            textSize(30)
+            textSize(100)
             fill(255)
-            text("대기 화면", 500, 500);
+            text(songNameArr[this.num], 500, 350);
+            text(levelArr[this.num], 600, 500);
+            textSize(60)
+            text("난이도: ", 400, 500);
             fill(255);
             rect(500, 700, 200, 100);
+            textSize(30);
             fill(0);
             text("플레이", 500, 700);
         }
