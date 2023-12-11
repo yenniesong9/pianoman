@@ -46,6 +46,7 @@ let songArr = []
 
 let selectableNPC = -1;
 let heart;
+let arrow;
 let bartenderPng;
 let bartenderPng2;
 let bartenderScript = ["아 피아노맨! 드디어 왔는가?", "크리스마스에 갑자기 무슨 일이냐고? 휴...", "좋은 날에 우울한 손님들이 너무 많이 왔어.", 
@@ -113,9 +114,10 @@ function preload() {
   }
 
   playerPng = loadImage('images/NPC/주인공 3인칭(기본).png');
-  heart = loadImage('images/background/heart.png');
-  bartenderPng = loadImage('images/bartender/tmpBartender.png')
-  bartenderPng2 = loadImage('images/bartender/tmpBartender.png')
+  heart = loadImage('images/NPC/하트.png');
+  arrow = loadImage('images/NPC/화살표.png');
+  bartenderPng = loadImage('images/NPC/바텐더 3인칭(기본).png')
+  bartenderPng2 = loadImage('images/NPC/바텐더 3인칭(기본).png')
   cabin = loadImage('images/background/cabin.jpeg')
   startButton = loadImage('images/button/대화창버튼기본.png');
   startButtonClicked = loadImage('images/button/대화창버튼눌림.png')
@@ -211,7 +213,6 @@ function missionFinished() {
   
 }
 
-
 function beforeStart() {
   image(cabin, 0, -300);
   fill(255);
@@ -235,8 +236,10 @@ function bartender() {
   key_default.resize(250,250);
   image(key_default,760,800);
   let tmpBart = bartenderPng;
-  tmpBart.resize(100,200);
-  image(tmpBart, 450, 100);
+  tmpBart.resize(NPC_w, NPC_h);
+  image(tmpBart, 450, 150);
+  arrow.resize(100, 80);
+  image(arrow, 450, 70);
 
   //플레이어 움직이기
   movePlayer();
@@ -246,17 +249,12 @@ function bartender() {
   drawPlayer();
 
   if (plX > 400 && plX < 530 && plY > 0 && plY < 350) {
-    fill(255, 0, 0)
     key_shift.resize(100, 50);
     image(key_shift,plX, plY - 45);
     if (keyIsDown(SHIFT)){
       missionPointer = 0;
     }
-  } else {
-    fill(255)
   }
-  noStroke();
-  triangle(450, 50, 550, 50, 500, 100);
 
   //player가 밑으로 지나가야 하는 오브젝트 모음
   piano.resize(300-20, 290-5);
@@ -270,7 +268,7 @@ function bartender() {
   if (missionPointer != -1) {
     fill(0, 150);
     rect(width/2, height/2, width, height);
-    image(bartenderPng2, 350, 100);
+    image(bartenderPng2, 300, 100);
     fill(255);
     textSize(30);
     text(bartenderScript[missionPointer], width/2, 750);
@@ -286,8 +284,8 @@ function lobby() {
   image(key_default,760,800);
 
   let tmpBart = bartenderPng;
-  tmpBart.resize(100,200);
-  image(tmpBart, 450, 100);
+  tmpBart.resize(NPC_w, NPC_h);
+  image(tmpBart, 450, 150);
 
   //플레이어 움직이기
   movePlayer();
