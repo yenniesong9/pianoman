@@ -17,7 +17,8 @@ let success_count = 0;
 let playingNPC;
 
 //lobby에 표시하는 용
-let NPC_pngs = []; //npc 이미지 저장
+let NPC_pngs = [];
+let NPC_choose = []; //npc 이미지 저장
 let NPC_position = [[260, 330], [640, 250], [780, 470], [180,650]]; //npc 위치 저장
 let NPC_w = 100; //화면에 표시하는 크기
 let NPC_h = 130;
@@ -41,6 +42,8 @@ let isRightKeyPressed = false;
 let buttonBasicArr = []
 let buttonPressedArr = []
 let notePngArr = []
+
+let selectableNPC = -1;
 
 
 function preload() {
@@ -84,6 +87,9 @@ function preload() {
     let title = 'images/NPC/손님' + (i+1) + ' 3인칭(기본).png'
     let pixel = loadImage(title);
     NPC_pngs[i] = pixel;
+    let stroke = 'images/NPC/손님' + (i+1) + ' 3인칭(스트로크).png';
+    let choose = loadImage(stroke);
+    NPC_choose[i] = choose;
     let basic = loadImage('images/NPC/손님' + (i+1) + '기본(픽셀화).png');
     let success = loadImage('images/NPC/손님' + (i+1) + '성공(픽셀화).png');
     let npc = new NPC(i, basic, success);
@@ -262,15 +268,9 @@ function lobby() {
   //image(tabletop,410,365);
   
 
-  let selectableNPC = nearNPCs();
+  selectableNPC = nearNPCs();
 
   if (selectableNPC != -1) { //npc 근처에 있다면
-    //TODO: 스트로크 표시
-    //지금은 circle로 대체
-    noStroke();
-    fill(255);
-    circle(NPC_position[selectableNPC][0], NPC_position[selectableNPC][1],30,30);
-    
     //npc 옆 글씨로 키 누를 것을 안내
     key_shift.resize(100, 50);
     image(key_shift,plX, plY - 45);
@@ -322,7 +322,9 @@ function fail() {
 
 function drawNPCs() {
   for (let i = 0; i < NPC_count; i++) {
-    let img = NPC_pngs[i];
+    let img;
+    if (selectableNPC == i) img = NPC_choose[i];
+    else img = NPC_pngs[i];
     img.resize(NPC_w, NPC_h);
     image(img, NPC_position[i][0], NPC_position[i][1]);
   }
