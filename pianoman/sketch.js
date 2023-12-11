@@ -113,6 +113,8 @@ function preload() {
   songArr[1] = song1;
   songArr[2] = song2;
   songArr[3] = song3;
+
+  songLobby = loadSound('audio/christmasjazz.mp3');
 }
 
 function setup() {
@@ -130,6 +132,10 @@ function setup() {
   games[1] = new Game(1, song1);
   games[2] = new Game(2, song2);
   games[3] = new Game(3, song3);
+
+  songLobby.setLoop(true);
+  songLobby.setVolume(0.3);
+  songLobby.play();
 }
 
 function draw() {
@@ -382,6 +388,7 @@ function mouseClicked() {
         playingNPC.scriptPointer = 0;
         games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
         playingGame = games[playingNPC.num];
+        songLobby.stop();
         stage = 2;
       }
     } else if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
@@ -389,6 +396,7 @@ function mouseClicked() {
         playingGame = games[playingNPC.num];
         console.log("playing NPC num here: ", playingNPC.num);
         console.log(playingGame);
+        songLobby.stop();
         stage = 2;
       } else if (playingNPC.isReturnable()) { //게임 후 로비로 들어가는 경우
         if (playingNPC.mode == 1) { //성공했을 경우
@@ -420,6 +428,7 @@ function mouseClicked() {
         playingNPC.scriptPointer = 0;
         stage = 4;
       }
+      songLobby.play();
     }
   }
 }
