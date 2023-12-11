@@ -22,14 +22,9 @@ class Note {
 
     display() {
         //노트를 화면에 표시
-        //fill(laneColor[this.lane]);
-        //rect(this.x, this.y, this.width, this.height);
         this.img.resize(120, 120);
-        //fill(255, 0, 0);
-        //rect(this.x, this.y, this.width, this.height);
         image(this.img, this.x-60, this.y-60);
         //이미지는 코너를 중심으로 불러와짐
-
         
         //위치 업데이트
         this.y += this.speed;
