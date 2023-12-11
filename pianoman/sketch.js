@@ -40,6 +40,11 @@ let isDownKeyPressed = false;
 let isLeftKeyPressed = false;
 let isRightKeyPressed = false;
 
+let buttonBasicArr = []
+let buttonPressedArr = []
+let notePngArr = []
+
+
 function preload() {
   //이미지 불러오기
   bg_main = loadImage("images/background/bg_main.png");
@@ -67,6 +72,16 @@ function preload() {
   buttonDefault = loadImage('images/button/대화창버튼기본.png');
   buttonClick = loadImage('images/button/대화창버튼눌림.png');
   choose = loadImage('images/NPC/손님3 3인칭(스트로크).png');
+
+  buttonBasicArr[0] = loadImage('images/button/D버튼 기본.png')
+  buttonPressedArr[0] = loadImage('images/button/D버튼 눌림.png')
+  buttonBasicArr[1] = loadImage('images/button/F버튼 기본.png')
+  buttonPressedArr[1] = loadImage('images/button/F버튼 눌림.png')
+  buttonBasicArr[2] = loadImage('images/button/J버튼 기본.png')
+  buttonPressedArr[2] = loadImage('images/button/J버튼 눌림.png')
+  buttonBasicArr[3] = loadImage('images/button/K버튼 기본.png')
+  buttonPressedArr[3] = loadImage('images/button/K버튼 눌림.png')
+ 
   
   for (let i = 0; i < NPC_count; i++) {
     console.log(i);
@@ -81,6 +96,8 @@ function preload() {
     let npc = new NPC(i, basic, success);
     NPCs[i] = npc;
     console.log(NPCs[i]);
+    let notePng = loadImage('images/button/선물버튼' + (i+1) + '.png');
+    notePngArr[i] = notePng;
   }
 
   playerPng = loadImage('images/NPC/주인공 3인칭(기본).png');
@@ -135,6 +152,8 @@ function draw() {
     fail();
   }
 }
+
+//--------------- 각 스테이지 별 함수들 -----------------//
 
 function lobby() {
   image(bg_main,0,0);
@@ -283,7 +302,7 @@ function lobby() {
     //image(tabletop,410,365);
 }
 
-function talk_npc(){
+function talk_npc() {
   image(bg_npc,0,0);
 
   fill(255);
@@ -291,9 +310,11 @@ function talk_npc(){
   playingNPC.display();
 }
 
-function rhythm(){
+
+function rhythm() {
+  image(bg_main, 0, 0)
+  background(0, 0, 0, 150);
   song_lobby.stop();
-  background(0);
   fill(255);
   playingGame.display();
 }
@@ -314,8 +335,7 @@ function fail() {
   playingNPC.display();
 }
 
-
-//--------------- 각 함수 내부에서 추가적으로 사용되는 함수들 -----------------//
+//--------------- 함수 내부에서 추가적으로 사용되는 함수들 -----------------//
 
 function drawNPCs() {
   for (let i = 0; i < NPC_count; i++) {
@@ -339,8 +359,6 @@ function nearNPCs() {
   }
   return -1;
 }
-
-
 
 //--------------- 외부 입력과 관련된 함수들 -----------------//
 
@@ -372,7 +390,7 @@ function mouseClicked() {
     if (mouseX > 400 && mouseX < 600 && mouseY > 650 && mouseY < 750) {
       playingGame.startButtonClicked();
     }
-    if (mouseX > 400 && mouseX < 600 && mouseY > 650 && mouseY < 750) {
+    if (mouseX > 400 && mouseX < 600 && mouseY > 550 && mouseY < 650) {
       if (playingGame.returnResult() == 1) { //일단 무조건 성공이라 가정
         playingNPC.mode = 1;
         playingNPC.scriptPointer = 0;
@@ -386,16 +404,15 @@ function mouseClicked() {
   }
 }
 
-
 function keyPressed() {
   //게임
-  if (keyCode == 65) { //A
+  if (keyCode == 68) { //D
     playingGame.buttonPressed(0);
-  } else if (keyCode == 83) { //S
-    playingGame.buttonPressed(1);
-  } else if (keyCode == 68) { //D
-    playingGame.buttonPressed(2);
   } else if (keyCode == 70) { //F
+    playingGame.buttonPressed(1);
+  } else if (keyCode == 74) { //J
+    playingGame.buttonPressed(2);
+  } else if (keyCode == 75) { //K
     playingGame.buttonPressed(3);
   }
 
@@ -413,13 +430,13 @@ function keyPressed() {
 
 function keyReleased() {
   //게임
-  if (keyCode == 65) { //A
+  if (keyCode == 68) { //D
     playingGame.buttonReleased(0);
-  } else if (keyCode == 83) { //S
-    playingGame.buttonReleased(1);
-  } else if (keyCode == 68) { //D
-    playingGame.buttonReleased(2);
   } else if (keyCode == 70) { //F
+    playingGame.buttonReleased(1);
+  } else if (keyCode == 74) { //J
+    playingGame.buttonReleased(2);
+  } else if (keyCode == 75) { //K
     playingGame.buttonReleased(3);
   }
 
