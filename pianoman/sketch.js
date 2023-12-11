@@ -22,6 +22,7 @@ let NPC_position = [[260, 330], [640, 250], [780, 470], [180,650]]; //npc 위치
 let NPC_w = 100; //화면에 표시하는 크기
 let NPC_h = 130;
 
+//리듬게임
 let games = [];
 let playingGame;
 let song0;
@@ -63,11 +64,12 @@ function preload() {
 
   imageScript = loadImage('images/button/대화창높음.png');
   buttonDefault = loadImage('images/button/대화창버튼기본.png');
-  buttonClick = loadImage('images/button/대화창버튼눌림.png')
+  buttonClick = loadImage('images/button/대화창버튼눌림.png');
+  choose = loadImage('images/NPC/손님3 3인칭(스트로크).png');
   
   for (let i = 0; i < NPC_count; i++) {
     console.log(i);
-    let title = 'images/NPC/손님' + (i+1) + ' 3인칭(기본).png'
+    let title = 'images/NPC/손님' + (i+1) + ' 3인칭(기본).png';
     let pixel = loadImage(title);
     NPC_pngs[i] = pixel;
     let basic = loadImage('images/NPC/손님' + (i+1) + '기본(픽셀화).png');
@@ -80,6 +82,8 @@ function preload() {
   playerPng = loadImage('images/NPC/주인공 3인칭(기본).png');
 
   //음악 불러오기
+  song_lobby = loadSound('audio/christmasjazz.mp3');
+
   song0 = loadSound('audio/hbdhard2.mp3');
   song1 = loadSound('audio/stnc.mp3');
   song2 = loadSound('audio/memories1.mp3');
@@ -92,10 +96,14 @@ function setup() {
   bg_h = bg_main.height;
   createCanvas(bg_w, bg_h);
 
+  //song_lobby.play();
+  //song_lobby.setLoop(true);
+
   //mode 초기화
   rectMode(CENTER);
   textAlign(CENTER, CENTER);
   textFont(pixelFont);
+
   //game 미리 생성 (임시)
   games[0] = new Game(0, song0);
   games[1] = new Game(1, song1);
@@ -122,6 +130,13 @@ function lobby() {
   image(bg_main,0,0);
   key_default.resize(250,250);
   image(key_default,760,800);
+
+  //음악 로드
+  let loaded = false;
+  if (frameCount === 1 && !loaded) {
+  song_lobby.play();
+  loaded = true; // 이후로는 다시 로드되지 않도록 플래그 설정
+  }
 
   //player 위치 조정 & 방향키 누름 표시
   if (isUpKeyPressed) {
@@ -150,7 +165,9 @@ function lobby() {
   plX = constrain(plX, 150, width-200);
   plY = constrain(plY, 60, height-150);
 
-  if(plX < 700 && plX > 400 && plY < 150 && plY > 100){
+  if(plX < 700 && plX > 400 && plY < 150 && plY > 100) isDownKeyPressed = false;
+  if(plX > 660 && plY > 650){
+    isRightKeyPressed = false;
     isDownKeyPressed = false;
   }
   
@@ -197,16 +214,12 @@ function lobby() {
     ) {
       isRightKeyPressed = false; // 부딪히면 방향키 비활성화
       isUpKeyPressed = false;
-      //isDownKeyPressed = false;
-      //plY = 475 - NPC_h/2; // 부딪히면 좌표 재지정
     } else if (
     plX < 320 + 10 + pianobottom.width - NPC_w/2 && plX >= 320 + pianobottom.width/2 &&
     plY < 475 + pianobottom.height - NPC_h + 10 && plY > 475 - NPC_h/2
     ) {
       isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
       isUpKeyPressed = false;
-      //isDownKeyPressed = false;
-      //plX = 320 + 10 + pianobottom.width - NPC_w/2  // 부딪히면 좌표 재지정
     }
 
   //빅식물
@@ -226,7 +239,6 @@ function lobby() {
   if (plX > 690 && plX < 690 + smallplant.width/2 && plY > 650) plY = 650;
   else if (plX >= 690 + smallplant.width/2 &&
   plX < 690 + smallplant.width && plY > 650) plX = plX;
-
   //--------------------------------------------------------------//
 
   //npc 그리기
@@ -242,7 +254,6 @@ function lobby() {
   image(smallplant,690,650);
   image(shelf,570,179);
   //image(tabletop,410,365);
-  
 
   let selectableNPC = nearNPCs();
 
@@ -269,13 +280,13 @@ function lobby() {
 function talk_npc(){
   image(bg_npc,0,0);
 
-  //스크립트 디스플레이 공간
   fill(255);
   textSize(28);
   playingNPC.display();
 }
 
 function rhythm(){
+  song_lobby.stop();
   background(0);
   fill(255);
   playingGame.display();
@@ -283,8 +294,7 @@ function rhythm(){
 
 function success() {
   image(bg_npc,0,0);
-  
-  //스크립트 디스플레이 공간
+
   fill(255);
   textSize(28);
   playingNPC.display();
@@ -293,7 +303,6 @@ function success() {
 function fail() {
   image(bg_npc,0,0);
 
-  //스크립트 디스플레이 공간
   fill(255);
   textSize(28);
   playingNPC.display();
