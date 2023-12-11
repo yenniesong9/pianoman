@@ -11,7 +11,7 @@ let stage = 0; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
 ///NPC 관련 변수
 let NPC_count = 4; //TODO: 향후 수정 필요
 let NPCs = []; //NPC 객체들을 담을 배열
-let NPC_completed, NPC_tried = [0, 0, 0, 0]; //성공하면 1로 바뀌는 배열
+let NPC_completed = [0, 0, 0, 0]; //성공하면 1로 바뀌는 배열
 let success_count = 0;
 
 let playingNPC;
@@ -45,6 +45,7 @@ let notePngArr = []
 let songArr = []
 
 let selectableNPC = -1;
+let heart;
 
 
 function preload() {
@@ -101,6 +102,7 @@ function preload() {
   }
 
   playerPng = loadImage('images/NPC/주인공 3인칭(기본).png');
+  heart = loadImage('images/background/heart.png');
 
   //음악 불러오기
   song0 = loadSound('audio/hbdhard2.mp3');
@@ -183,6 +185,10 @@ function lobby() {
       console.log("selectabel num: " , selectableNPC);
     }
   }
+
+  textSize(20);
+  fill(255);
+  text("성공한 손님 수: " + success_count, 230, 950);
 }
 
 function talk_npc() {
@@ -227,6 +233,11 @@ function drawNPCs() {
     if (selectableNPC == i) img = NPC_choose[i];
     else img = NPC_pngs[i];
     img.resize(NPC_w, NPC_h);
+    if (NPC_completed[i] == 1) {
+      let heartPng = heart;
+      heartPng.resize(50, 50);
+      image(heartPng, NPC_position[i][0]+NPC_w/2, NPC_position[i][1] - 50)
+    }
     image(img, NPC_position[i][0], NPC_position[i][1]);
   }
 }
@@ -240,7 +251,9 @@ function drawPlayer() {
 function nearNPCs() {
   for (let i = 0; i < NPC_count; i++) {
     if (dist(plX, plY, NPC_position[i][0], NPC_position[i][1]) < 100) {
-      return i;
+      if (NPC_completed[i] == 0) {
+        return i;
+      }
     }
   }
   return -1;
@@ -360,11 +373,11 @@ function mouseClicked() {
 
   if (stage == 1 || stage == 3 || stage == 4) { //스크립트 플레이
     if (mouseX > 635 && mouseX < 785 && mouseY > 882 && mouseY < 957){
-      if (playingNPC.isPlayable()) {
+      if (playingNPC.isPlayable()) { //게임 하기 전에 로비로 돌아가는 경우
         console.log("return to lobby");
         playingNPC.scriptPointer = 0;
         stage = 0;
-      } else { //게임 다시 플레이
+      } else { //실패 상태에서 게임 다시 플레이
         console.log("test");
         playingNPC.scriptPointer = 0;
         games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
@@ -372,14 +385,18 @@ function mouseClicked() {
         stage = 2;
       }
     } else if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
-      if (playingNPC.isPlayable()) {
+      if (playingNPC.isPlayable()) { //게임 시작하는 경우
         playingGame = games[playingNPC.num];
         console.log("playing NPC num here: ", playingNPC.num);
         console.log(playingGame);
         stage = 2;
-      } else if (playingNPC.isReturnable()) {
+      } else if (playingNPC.isReturnable()) { //게임 후 로비로 들어가는 경우
+        if (playingNPC.mode == 1) { //성공했을 경우
+          NPC_completed[playingNPC.num] = 1;
+          success_count++;
+        }
         stage = 0;
-      } else {
+      } else { //스크립트 진행
         playingNPC.updateScriptPointer();
       }
     }
