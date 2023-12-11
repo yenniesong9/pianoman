@@ -44,6 +44,10 @@ let buttonBasicArr = []
 let buttonPressedArr = []
 let notePngArr = []
 
+let selectableNPC;
+
+
+
 
 function preload() {
   //이미지 불러오기
@@ -270,7 +274,8 @@ function lobby() {
   //npc 그리기
   drawNPCs();
 
-  let selectableNPC = nearNPCs();
+  selectableNPC = nearNPCs();
+
   if (selectableNPC != -1) { //npc 근처에 있다면
     //스트로크 표시
     let img = NPC_choose[selectableNPC];
@@ -337,9 +342,14 @@ function fail() {
 
 //--------------- 함수 내부에서 추가적으로 사용되는 함수들 -----------------//
 
-function drawNPCs() {
+function drawNPCs(n) {
   for (let i = 0; i < NPC_count; i++) {
-    let img = NPC_pngs[i];
+    let img;
+    if (selectableNPC == i) {
+      img = NPC_choose[i];
+    } else {
+      img = NPC_pngs[i];
+    }
     img.resize(NPC_w, NPC_h);
     image(img, NPC_position[i][0], NPC_position[i][1]);
   }
