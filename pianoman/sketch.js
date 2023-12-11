@@ -55,6 +55,9 @@ let cabin;
 let startButton;
 let startButtonClicked;
 
+let missionCompleteScript = ["고마워 피아노맨!", "너 덕분에 한 숨 돌렸어"];
+let completePointer = -1;
+
 
 function preload() {
   //이미지 불러오기
@@ -165,12 +168,49 @@ function draw() {
     rhythm();
   } else if (stage == 3){ //성공 스크립트 진행
     success();
-  } else if (stage == 4) { //실패 스크립트 진행
+  } else if (stage == 4){ //실패 스크립트 진행
     fail();
+  } else if (stage == 5){ //전체 성공
+    missionFinished();
   }
 }
 
 //--------------- 각 스테이지 별 함수들 -----------------//
+function missionFinished() {
+  image(bg_main,0,0);
+  key_default.resize(250,250);
+  image(key_default,760,800);
+  let tmpBart = bartenderPng;
+  tmpBart.resize(100,200);
+  image(tmpBart, 450, 100);
+
+  //플레이어 움직이기
+  movePlayer();
+  //npc 그리기
+  drawNPCs();
+  //player 그리기
+  drawPlayer();
+  //player가 밑으로 지나가야 하는 오브젝트 모음
+  piano.resize(300-20, 290-5);
+  shelf.resize(94-5, 204-5);
+  image(piano,320,475);
+  image(bigplanttop,716,368);
+  image(smallplant,690,650);
+  image(shelf,570,179);
+  //image(tabletop,410,365);
+
+  fill(0, 150);
+  rect(width/2, height/2, width, height);
+  image(bartenderPng2, 350, 100);
+  fill(255);
+  textSize(30);
+  text(missionCompleteScript[completePointer], width/2, 750);
+  let button1 = new Button(880-75, 920-37.5);
+  button1.setTitle("다음으로");
+  button1.show();
+  
+}
+
 
 function beforeStart() {
   image(cabin, 0, -300);
@@ -244,6 +284,10 @@ function lobby() {
   image(bg_main,0,0);
   key_default.resize(250,250);
   image(key_default,760,800);
+
+  let tmpBart = bartenderPng;
+  tmpBart.resize(100,200);
+  image(tmpBart, 450, 100);
 
   //플레이어 움직이기
   movePlayer();
@@ -492,7 +536,11 @@ function mouseClicked() {
           games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
           playingNPC.scriptPointer = 0;
         }
-        stage = 0;
+        if (success_count == 2) {
+          stage = 5;
+        } else {
+          stage = 0;
+        }
       } else { //스크립트 진행
         playingNPC.updateScriptPointer();
       }
@@ -529,6 +577,15 @@ function mouseClicked() {
   if (stage == -2) {
     if (mouseX > 380 && mouseX < 630 && mouseY > 450 && mouseY < 570) {
       stage = -1;
+    }
+  }
+
+  if (stage == 5) {
+    if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
+      if (completePointer == missionCompleteScript.length - 1) {
+        stage = 0; //로비로
+      }
+      completePointer++;
     }
   }
 }
