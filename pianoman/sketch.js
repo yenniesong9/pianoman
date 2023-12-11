@@ -38,6 +38,9 @@ let isDownKeyPressed = false;
 let isLeftKeyPressed = false;
 let isRightKeyPressed = false;
 
+let buttonBasicArr = []
+let buttonPressedArr = []
+
 
 function preload() {
   //이미지 불러오기
@@ -65,6 +68,15 @@ function preload() {
   imageScript = loadImage('images/button/대화창높음.png');
   buttonDefault = loadImage('images/button/대화창버튼기본.png');
   buttonClick = loadImage('images/button/대화창버튼눌림.png')
+
+  buttonBasicArr[0] = loadImage('images/button/D버튼 기본.png')
+  buttonPressedArr[0] = loadImage('images/button/D버튼 눌림.png')
+  buttonBasicArr[1] = loadImage('images/button/F버튼 기본.png')
+  buttonPressedArr[1] = loadImage('images/button/F버튼 눌림.png')
+  buttonBasicArr[2] = loadImage('images/button/J버튼 기본.png')
+  buttonPressedArr[2] = loadImage('images/button/J버튼 눌림.png')
+  buttonBasicArr[3] = loadImage('images/button/K버튼 기본.png')
+  buttonPressedArr[3] = loadImage('images/button/K버튼 눌림.png')
   
   for (let i = 0; i < NPC_count; i++) {
     console.log(i);

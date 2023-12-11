@@ -1,5 +1,6 @@
-let laneStartX = [100, 300, 500, 700];
-let laneStartY = 900;
+let laneStartX = [150, 350, 550, 750];
+let laneStartY = 850;
+let laneDetected = 870;
 let laneColor = ['pink', 'red', 'salmon', 'orange'];
 
 
@@ -29,7 +30,7 @@ class Note {
 
     checkHit(lane) { //lane에 닿았다면 true 반환
         if (lane == this.lane) { //lane이 같음
-            if (this.y + this.height >= laneStartY) { //노트가 레인에 닿음
+            if (this.y + this.height >= laneDetected) { //노트가 레인에 닿음
                 return true;
             }
         }

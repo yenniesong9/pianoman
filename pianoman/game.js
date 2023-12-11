@@ -129,7 +129,7 @@ class Game {
     deleteNote() {
         if (this.displayedNotes.length != 0) {
             let oldestNote = this.displayedNotes[0];
-            if (oldestNote.y > laneStartY) {
+            if (oldestNote.y - oldestNote.height/2 > laneDetected) {
                 this.displayedNotes.shift(); //가장 오래된 노트 삭제
                 this.miss++; //miss 횟수 증가
             }
@@ -199,7 +199,7 @@ class Game {
         for (let i = 0; i < this.displayedNotes.length; i++) { //가장 오래된 노트부터 살핌
             let checkNote = this.displayedNotes[i];
 
-            if (checkNote.y + checkNote.height < laneStartY) { //이번에 살피는 노트가 레인에 닿지 않음
+            if (checkNote.y + checkNote.height/2 < laneDetected) { //이번에 살피는 노트가 레인에 닿지 않음
                 break; //더 이상 확인할 필요 없음
             }
 
@@ -226,14 +226,15 @@ class Game {
     drawButton() {
         for (let i = 0; i < 4; i++) {
             if (lanePressed[i]) {
-                fill(150);
+                let tmp = buttonPressedArr[i]
+                tmp.resize(150, 110)
+                image(tmp, laneStartX[i]-75, laneStartY)
             } else {
-                fill(255);
+                let tmp = buttonBasicArr[i]
+                tmp.resize(150, 110)
+                image(tmp, laneStartX[i]-75, laneStartY)
+
             }
-            rect(laneStartX[i], laneStartY, 100, 50);
-            textSize(30);
-            fill(0);
-            text(laneText[i], laneStartX[i], laneStartY+10);
         }
     }
 
