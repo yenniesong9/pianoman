@@ -67,9 +67,14 @@ class NPC {
             fill(50);
             text(scripts[this.num][this.mode][this.scriptPointer], width / 2, height / 2 + 280);
             let button1 = new Button(880-75, 920-37.5);
+            let button2 = new Button(880-75-170, 920-37.5);
             if (this.scriptPointer < scripts[this.num][this.mode].length - 1) {
                 button1.setTitle("다음으로");
             } else {
+                if (this.mode == 2) {
+                    button2.setTitle("다시 연주하기");
+                    button2.show();
+                }
                 button1.setTitle("로비로 가기");
             }
             button1.show();

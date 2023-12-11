@@ -42,6 +42,7 @@ let isRightKeyPressed = false;
 let buttonBasicArr = []
 let buttonPressedArr = []
 let notePngArr = []
+let songArr = []
 
 let selectableNPC = -1;
 
@@ -106,6 +107,10 @@ function preload() {
   song1 = loadSound('audio/stnc.mp3');
   song2 = loadSound('audio/memories1.mp3');
   song3 = loadSound('audio/jinglebell.mp3');
+  songArr[0] = song0;
+  songArr[1] = song1;
+  songArr[2] = song2;
+  songArr[3] = song3;
 }
 
 function setup() {
@@ -147,6 +152,101 @@ function lobby() {
   key_default.resize(250,250);
   image(key_default,760,800);
 
+  //플레이어 움직이기
+  movePlayer();
+  //npc 그리기
+  drawNPCs();
+  //player 그리기
+  drawPlayer();
+
+  //player가 밑으로 지나가야 하는 오브젝트 모음
+  piano.resize(300-20, 290-5);
+  shelf.resize(94-5, 204-5);
+  image(piano,320,475);
+  image(bigplanttop,716,368);
+  image(smallplant,690,650);
+  image(shelf,570,179);
+  //image(tabletop,410,365);
+  
+
+  selectableNPC = nearNPCs();
+
+  if (selectableNPC != -1) { //npc 근처에 있다면
+    //npc 옆 글씨로 키 누를 것을 안내
+    key_shift.resize(100, 50);
+    image(key_shift,plX, plY - 45);
+    //쉬프트 누르면 스테이지 1로 이동
+    //여러번 호출되는 문제가 발생. 한 번만 호출되도록 수정 필요할 수도 있음.
+    if (keyIsDown(SHIFT)){
+      stage = 1;
+      playingNPC = NPCs[selectableNPC];
+      console.log("selectabel num: " , selectableNPC);
+    }
+  }
+}
+
+function talk_npc() {
+  image(bg_npc,0,0);
+
+  //스크립트 디스플레이 공간
+  fill(255);
+  textSize(28);
+  playingNPC.display();
+}
+
+function rhythm() {
+  image(bg_main, 0, 0)
+  background(0, 0, 0, 150);
+  fill(255);
+  playingGame.display();
+}
+
+function success() {
+  image(bg_npc,0,0);
+  
+  //스크립트 디스플레이 공간
+  fill(255);
+  textSize(28);
+  playingNPC.display();
+}
+
+function fail() {
+  image(bg_npc,0,0);
+
+  //스크립트 디스플레이 공간
+  fill(255);
+  textSize(28);
+  playingNPC.display();
+}
+
+//--------------- 함수 내부에서 추가적으로 사용되는 함수들 -----------------//
+
+function drawNPCs() {
+  for (let i = 0; i < NPC_count; i++) {
+    let img;
+    if (selectableNPC == i) img = NPC_choose[i];
+    else img = NPC_pngs[i];
+    img.resize(NPC_w, NPC_h);
+    image(img, NPC_position[i][0], NPC_position[i][1]);
+  }
+}
+
+function drawPlayer() {
+  let photo = playerPng;
+  photo.resize(NPC_w, NPC_h);
+  image(photo, plX, plY);
+}
+
+function nearNPCs() {
+  for (let i = 0; i < NPC_count; i++) {
+    if (dist(plX, plY, NPC_position[i][0], NPC_position[i][1]) < 100) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+function movePlayer() {
   //player 위치 조정 & 방향키 누름 표시
   if (isUpKeyPressed) {
     plY -= plSpeed;
@@ -251,98 +351,6 @@ function lobby() {
   else if (plX >= 690 + smallplant.width/2 &&
   plX < 690 + smallplant.width && plY > 650) plX = plX;
 
-  //--------------------------------------------------------------//
-
-  //npc 그리기
-  drawNPCs();
-  //player 그리기
-  drawPlayer();
-
-  //player가 밑으로 지나가야 하는 오브젝트 모음
-  piano.resize(300-20, 290-5);
-  shelf.resize(94-5, 204-5);
-  image(piano,320,475);
-  image(bigplanttop,716,368);
-  image(smallplant,690,650);
-  image(shelf,570,179);
-  //image(tabletop,410,365);
-  
-
-  selectableNPC = nearNPCs();
-
-  if (selectableNPC != -1) { //npc 근처에 있다면
-    //npc 옆 글씨로 키 누를 것을 안내
-    key_shift.resize(100, 50);
-    image(key_shift,plX, plY - 45);
-    //쉬프트 누르면 스테이지 1로 이동
-    //여러번 호출되는 문제가 발생. 한 번만 호출되도록 수정 필요할 수도 있음.
-    if (keyIsDown(SHIFT)){
-      stage = 1;
-      playingNPC = NPCs[selectableNPC];
-      console.log("selectabel num: " , selectableNPC);
-    }
-  }
-}
-
-function talk_npc() {
-  image(bg_npc,0,0);
-
-  //스크립트 디스플레이 공간
-  fill(255);
-  textSize(28);
-  playingNPC.display();
-}
-
-function rhythm() {
-  image(bg_main, 0, 0)
-  background(0, 0, 0, 150);
-  fill(255);
-  playingGame.display();
-}
-
-function success() {
-  image(bg_npc,0,0);
-  
-  //스크립트 디스플레이 공간
-  fill(255);
-  textSize(28);
-  playingNPC.display();
-}
-
-function fail() {
-  image(bg_npc,0,0);
-
-  //스크립트 디스플레이 공간
-  fill(255);
-  textSize(28);
-  playingNPC.display();
-}
-
-//--------------- 함수 내부에서 추가적으로 사용되는 함수들 -----------------//
-
-function drawNPCs() {
-  for (let i = 0; i < NPC_count; i++) {
-    let img;
-    if (selectableNPC == i) img = NPC_choose[i];
-    else img = NPC_pngs[i];
-    img.resize(NPC_w, NPC_h);
-    image(img, NPC_position[i][0], NPC_position[i][1]);
-  }
-}
-
-function drawPlayer() {
-  let photo = playerPng;
-  photo.resize(NPC_w, NPC_h);
-  image(photo, plX, plY);
-}
-
-function nearNPCs() {
-  for (let i = 0; i < NPC_count; i++) {
-    if (dist(plX, plY, NPC_position[i][0], NPC_position[i][1]) < 100) {
-      return i;
-    }
-  }
-  return -1;
 }
 
 //--------------- 외부 입력과 관련된 함수들 -----------------//
@@ -353,9 +361,15 @@ function mouseClicked() {
   if (stage == 1 || stage == 3 || stage == 4) { //스크립트 플레이
     if (mouseX > 635 && mouseX < 785 && mouseY > 882 && mouseY < 957){
       if (playingNPC.isPlayable()) {
-      console.log("return to lobby");
-      playingNPC.scriptPointer = 0;
-      stage = 0;
+        console.log("return to lobby");
+        playingNPC.scriptPointer = 0;
+        stage = 0;
+      } else { //게임 다시 플레이
+        console.log("test");
+        playingNPC.scriptPointer = 0;
+        games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
+        playingGame = games[playingNPC.num];
+        stage = 2;
       }
     } else if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
       if (playingNPC.isPlayable()) {
@@ -376,11 +390,11 @@ function mouseClicked() {
       playingGame.startButtonClicked();
     }
     if (mouseX > 400 && mouseX < 600 && mouseY > 550 && mouseY < 650) {
-      if (playingGame.returnResult() == 1) { //일단 무조건 성공이라 가정
+      if (playingGame.returnResult() == 1) { //성공의 경우
         playingNPC.mode = 1;
         playingNPC.scriptPointer = 0;
         stage = 3;
-      } else if (playingGame.returnResult() == -1){
+      } else if (playingGame.returnResult() == -1){ //실패의 경우
         playingNPC.mode = 2;
         playingNPC.scriptPointer = 0;
         stage = 4;
