@@ -149,6 +149,8 @@ class Game {
                         note.display();
                     }
 
+                    this.detectCollision();
+
                     this.song.onended(() => {
                         console.log("song end");
                         this.songEnd = 1;
@@ -194,8 +196,7 @@ class Game {
         
     }
 
-    buttonPressed(lane) { //key가 눌려지면 실행
-        lanePressed[lane] = 1;
+    detectCollision() {
         for (let i = 0; i < this.displayedNotes.length; i++) { //가장 오래된 노트부터 살핌
             let checkNote = this.displayedNotes[i];
 
@@ -203,12 +204,20 @@ class Game {
                 break; //더 이상 확인할 필요 없음
             }
 
-            if (checkNote.checkHit(lane)) { //노트가 레인에 닿았다면
-                this.displayedNotes.splice(i, 1); //노트 삭제
-                this.hit++; //hit 횟수 증가
-                break; //더 이상 확인할 필요 없음
+            for (let lane = 0; lane < 4; lane++) {
+                if (lanePressed[lane]) { //해당 레인이 눌러져 있다면
+                    if (checkNote.checkHit(lane)) { //노트가 레인에 닿았다면
+                        this.displayedNotes.splice(i, 1); //노트 삭제
+                        this.hit++; //hit 횟수 증가
+                        break; //더 이상 확인할 필요 없음
+                    }
+                }
             }
         }   
+    }
+
+    buttonPressed(lane) { //key가 눌려지면 실행
+        lanePressed[lane] = 1;
     }
 
     buttonReleased(lane) {
