@@ -86,6 +86,9 @@ class Game {
 
         this.hit = 0;
         this.miss = 0;
+
+        this.lastHitTime = 0;
+        this.lastMissTime = 0;
     }
 
     start() { //외부에서 플레이 버튼을 눌렀을 때 실행. 게임 시작
@@ -106,15 +109,18 @@ class Game {
         }
 
         //새 노트 생성해서 추가
-        //console.log(this.notePointer);
-        let nextNote = this.notes[this.notePointer];
-        //console.log(this.notePointer);
-        //console.log(nextNote);
-        if (curTime - this.startTime > nextNote.timing*this.bpm) {
-            //this.lastUpdatedTime = curTime;
-            this.displayedNotes.push(nextNote);
-            this.notePointer++;
+        while (true) {
+            if (this.notePointer >= this.notes.length) break;
+            let nextNote = this.notes[this.notePointer];
+            if (curTime - this.startTime > nextNote.timing*this.bpm) {
+                //this.lastUpdatedTime = curTime;
+                this.displayedNotes.push(nextNote);
+                this.notePointer++;
+            } else {
+                break;
+            }
         }
+        
 
         //delay가 지났다면 음악 재생
         if (this.songPlay == 0) {
@@ -142,14 +148,13 @@ class Game {
                 if (!this.songEnd) {
                     this.addNote(); //새 노트 업데이트
                     this.deleteNote();
+                    this.detectCollision();
 
                     //디스플레이
                     //console.log(this.displayedNotes);
                     for (let note of this.displayedNotes) {
                         note.display();
                     }
-
-                    this.detectCollision();
 
                     this.song.onended(() => {
                         console.log("song end");
@@ -209,6 +214,9 @@ class Game {
                     if (checkNote.checkHit(lane)) { //노트가 레인에 닿았다면
                         this.displayedNotes.splice(i, 1); //노트 삭제
                         this.hit++; //hit 횟수 증가
+                        fill(255);
+                        textSize(100);
+                        text("hit", width/2, 400);
                         break; //더 이상 확인할 필요 없음
                     }
                 }

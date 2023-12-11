@@ -1,6 +1,6 @@
-let laneStartX = [150, 350, 550, 750];
+let laneStartX = [200, 400, 600, 800];
 let laneStartY = 850;
-let laneDetected = 870;
+let laneDetected = 875;
 let laneColor = ['pink', 'red', 'salmon', 'orange'];
 
 
