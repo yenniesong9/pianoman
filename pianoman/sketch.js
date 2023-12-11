@@ -279,7 +279,8 @@ function talk_npc() {
 }
 
 function rhythm() {
-  background(0);
+  image(bg_main, 0, 0)
+  background(0, 0, 0, 150);
   fill(255);
   playingGame.display();
 }
@@ -357,7 +358,7 @@ function mouseClicked() {
     if (mouseX > 400 && mouseX < 600 && mouseY > 650 && mouseY < 750) {
       playingGame.startButtonClicked();
     }
-    if (mouseX > 400 && mouseX < 600 && mouseY > 650 && mouseY < 750) {
+    if (mouseX > 400 && mouseX < 600 && mouseY > 550 && mouseY < 650) {
       if (playingGame.returnResult() == 1) { //일단 무조건 성공이라 가정
         playingNPC.mode = 1;
         playingNPC.scriptPointer = 0;
@@ -373,13 +374,13 @@ function mouseClicked() {
 
 function keyPressed() {
   //게임
-  if (keyCode == 65) { //A
+  if (keyCode == 68) { //D
     playingGame.buttonPressed(0);
-  } else if (keyCode == 83) { //S
-    playingGame.buttonPressed(1);
-  } else if (keyCode == 68) { //D
-    playingGame.buttonPressed(2);
   } else if (keyCode == 70) { //F
+    playingGame.buttonPressed(1);
+  } else if (keyCode == 74) { //J
+    playingGame.buttonPressed(2);
+  } else if (keyCode == 75) { //K
     playingGame.buttonPressed(3);
   }
 
@@ -397,13 +398,13 @@ function keyPressed() {
 
 function keyReleased() {
   //게임
-  if (keyCode == 65) { //A
+  if (keyCode == 68) { //D
     playingGame.buttonReleased(0);
-  } else if (keyCode == 83) { //S
-    playingGame.buttonReleased(1);
-  } else if (keyCode == 68) { //D
-    playingGame.buttonReleased(2);
   } else if (keyCode == 70) { //F
+    playingGame.buttonReleased(1);
+  } else if (keyCode == 74) { //J
+    playingGame.buttonReleased(2);
+  } else if (keyCode == 75) { //K
     playingGame.buttonReleased(3);
   }
 

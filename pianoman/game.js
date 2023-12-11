@@ -52,10 +52,10 @@ let notes3 = [[3,0],[3,0.75],[1,1],[2,2],[2,2.75],[0,3],[0,4],[3,3.75],[2,5],[1,
 ]; //npc4 -jinglebell
 
 let noteArr = [notes0, notes1, notes2, notes3];
+let songNameArr = ["Happy Birthday", "Something never change", "Memories", "Jingle Bell"]
+let levelArr = ["★", "★★", "★★★", "★★★★"]
 
-
-let audioName = ["birthday.mp3", "", "", ""];
-let laneText = ["A", "S", "D", "F"];
+let laneText = ["D", "F", "J", "K"];
 let lanePressed = [0, 0, 0, 0];
 
 let bpms = [500, 470, 466, 458]; //한 박자 시간
@@ -165,24 +165,26 @@ class Game {
                 this.drawStatistics();
             } else {
                 //게임 종료 화면
-                fill(255, 0, 0);
-                rectMode(CENTER)
-                rect(500, 500, 1024, 1024);
+                //fill(0, 0, 0);
+                //rectMode(CENTER)
+                //rect(500, 500, 1024, 1024);
                 textSize(100);
-                fill(0);
+                fill(255);
                 if (this.hit/this.notes.length > 0.8) {
-                    text("Success!", 500, 500);
+                    text("Success!", width/2, 400);
                 } else {
-                    text("Game Over", 500, 500);   
+                    text("Game Over", width/2, 400);   
                 }
                 fill(255);
-                rect(500, 700, 200, 100);
+                rect(500, 600, 200, 100);
                 fill(0);
                 textSize(30);
-                text("게임 종료", 500, 700);
+                text("게임 종료", 500, 600);
             }
         } else {
             //게임 시작
+            textSize(30)
+            fill(255)
             text("대기 화면", 500, 500);
             fill(255);
             rect(500, 700, 200, 100);
