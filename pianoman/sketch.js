@@ -394,6 +394,10 @@ function mouseClicked() {
         if (playingNPC.mode == 1) { //성공했을 경우
           NPC_completed[playingNPC.num] = 1;
           success_count++;
+        } else {
+          NPCs[playingNPC.num].mode = 0;
+          games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
+          playingNPC.scriptPointer = 0;
         }
         stage = 0;
       } else { //스크립트 진행
