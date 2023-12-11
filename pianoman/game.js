@@ -58,8 +58,8 @@ let levelArr = ["★", "★★", "★★★", "★★★★"]
 let laneText = ["D", "F", "J", "K"];
 let lanePressed = [0, 0, 0, 0];
 
-let bpms = [500, 470, 466, 458]; //한 박자 시간
-let startDelayArr = [3000, 3000, 3000, 3000]; //첫 노트가 나온 후 음악이 시작되기 까지의 시간
+let bpms = [502, 475, 466, 460]; //한 박자 시간
+let startDelayArr = [2800, 2800, 2800, 2800]; //첫 노트가 나온 후 음악이 시작되기 까지의 시간
 let textDisplayedTime = 25;
 
 class Game {
@@ -157,6 +157,7 @@ class Game {
                     //console.log(this.displayedNotes);
                     for (let note of this.displayedNotes) {
                         note.display();
+                        note.y = (millis()-this.startTime-note.timing*this.bpm)/3000*965 - 50;
                     }
 
                     this.song.onended(() => {
