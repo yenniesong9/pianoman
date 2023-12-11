@@ -50,15 +50,17 @@ let notes3 = [[3,0],[3,0.75],[1,1],[2,2],[2,2.75],[0,3],[0,4],[3,3.75],[2,5],[1,
 [0,52],[1,52.75],[2,53],[0,53.75],[3,53.75],
 [0,56.75],[3,56.75],[1,57.75],[2,57.75],[0,58],[1,59],[2,59.75],[3,59.75],[0,60],[3,60]
 ]; //npc4 -jinglebell
+
 let noteArr = [notes0, notes1, notes2, notes3];
+let songNameArr = ["Happy Birthday", "Something Never Change", "Memories", "Jingle Bell"]
+let levelArr = ["★", "★★", "★★★", "★★★★"]
 
-
-let audioName = ["birthday.mp3", "", "", ""];
-let laneText = ["A", "S", "D", "F"];
+let laneText = ["D", "F", "J", "K"];
 let lanePressed = [0, 0, 0, 0];
 
-let bpms = [500, 470, 466, 458]; //한 박자 시간
-let startDelayArr = [3000, 3000, 3000, 3000]; //첫 노트가 나온 후 음악이 시작되기 까지의 시간
+let bpms = [502, 475, 466, 462]; //한 박자 시간
+let startDelayArr = [2800, 2800, 2800, 2800]; //첫 노트가 나온 후 음악이 시작되기 까지의 시간
+let textDisplayedTime = 25;
 
 class Game {
 
@@ -85,6 +87,9 @@ class Game {
 
         this.hit = 0;
         this.miss = 0;
+
+        this.lastHitTime = 0;
+        this.lastMissTime = 0;
     }
 
     start() { //외부에서 플레이 버튼을 눌렀을 때 실행. 게임 시작
@@ -105,15 +110,18 @@ class Game {
         }
 
         //새 노트 생성해서 추가
-        //console.log(this.notePointer);
-        let nextNote = this.notes[this.notePointer];
-        //console.log(this.notePointer);
-        //console.log(nextNote);
-        if (curTime - this.startTime > nextNote.timing*this.bpm) {
-            //this.lastUpdatedTime = curTime;
-            this.displayedNotes.push(nextNote);
-            this.notePointer++;
+        while (true) {
+            if (this.notePointer >= this.notes.length) break;
+            let nextNote = this.notes[this.notePointer];
+            if (curTime - this.startTime > nextNote.timing*this.bpm) {
+                //this.lastUpdatedTime = curTime;
+                this.displayedNotes.push(nextNote);
+                this.notePointer++;
+            } else {
+                break;
+            }
         }
+        
 
         //delay가 지났다면 음악 재생
         if (this.songPlay == 0) {
@@ -128,9 +136,10 @@ class Game {
     deleteNote() {
         if (this.displayedNotes.length != 0) {
             let oldestNote = this.displayedNotes[0];
-            if (oldestNote.y > laneStartY) {
+            if (oldestNote.y - oldestNote.height/2 > laneDetected) {
                 this.displayedNotes.shift(); //가장 오래된 노트 삭제
                 this.miss++; //miss 횟수 증가
+                this.lastMissTime = textDisplayedTime;
             }
         }
     }
@@ -141,11 +150,14 @@ class Game {
                 if (!this.songEnd) {
                     this.addNote(); //새 노트 업데이트
                     this.deleteNote();
+                    this.detectCollision();
+                    this.hitAndMiss();
 
                     //디스플레이
                     //console.log(this.displayedNotes);
                     for (let note of this.displayedNotes) {
                         note.display();
+                        note.y = (millis()-this.startTime-note.timing*this.bpm)/3000*965 - 50;
                     }
 
                     this.song.onended(() => {
@@ -164,48 +176,70 @@ class Game {
                 this.drawStatistics();
             } else {
                 //게임 종료 화면
-                fill(255, 0, 0);
-                rectMode(CENTER)
-                rect(500, 500, 1024, 1024);
+                //fill(0, 0, 0);
+                //rectMode(CENTER)
+                //rect(500, 500, 1024, 1024);
                 textSize(100);
-                fill(0);
+                fill(255);
                 if (this.hit/this.notes.length > 0.8) {
-                    text("Success!", 500, 500);
+                    text("Success!", width/2, 400);
                 } else {
-                    text("Game Over", 500, 500);   
+                    text("Game Over", width/2, 400);   
                 }
                 fill(255);
-                rect(500, 700, 200, 100);
+                rect(500, 600, 200, 100);
                 fill(0);
                 textSize(30);
-                text("게임 종료", 500, 700);
+                text("게임 종료", 500, 600);
             }
         } else {
             //게임 시작
-            text("대기 화면", 500, 500);
+            textSize(100)
+            fill(255)
+            if (this.num == 1) {
+                textSize(80);
+            }
+            text(songNameArr[this.num], 500, 350);
+            text(levelArr[this.num], 600, 500);
+            textSize(60)
+            text("난이도: ", 400, 500);
             fill(255);
             rect(500, 700, 200, 100);
+            textSize(30);
             fill(0);
             text("플레이", 500, 700);
         }
         
     }
 
-    buttonPressed(lane) { //key가 눌려지면 실행
-        lanePressed[lane] = 1;
+    detectCollision() {
+        let deletedNoteIdx = [];
         for (let i = 0; i < this.displayedNotes.length; i++) { //가장 오래된 노트부터 살핌
             let checkNote = this.displayedNotes[i];
 
-            if (checkNote.y + checkNote.height < laneStartY) { //이번에 살피는 노트가 레인에 닿지 않음
+            if (checkNote.y + checkNote.height/2 < laneDetected) { //이번에 살피는 노트가 레인에 닿지 않음
                 break; //더 이상 확인할 필요 없음
             }
 
-            if (checkNote.checkHit(lane)) { //노트가 레인에 닿았다면
-                this.displayedNotes.splice(i, 1); //노트 삭제
-                this.hit++; //hit 횟수 증가
-                break; //더 이상 확인할 필요 없음
+            for (let lane = 0; lane < 4; lane++) {
+                if (lanePressed[lane]) { //해당 레인이 눌러져 있다면
+                    if (checkNote.checkHit(lane)) { //노트가 레인에 닿았다면
+                        //this.displayedNotes.splice(i, 1); //노트 삭제
+                        deletedNoteIdx.push(i);
+                        this.hit++; //hit 횟수 증가
+                        this.lastHitTime = textDisplayedTime;
+                        break; //이 노트를 더 이상 확인할 필요 없음
+                    }
+                }
             }
-        }   
+        }
+        for (let i = deletedNoteIdx.length - 1; i >= 0; i--) {
+            this.displayedNotes.splice(deletedNoteIdx[i], 1);
+        }
+    }
+
+    buttonPressed(lane) { //key가 눌려지면 실행
+        lanePressed[lane] = 1;
     }
 
     buttonReleased(lane) {
@@ -223,22 +257,42 @@ class Game {
     drawButton() {
         for (let i = 0; i < 4; i++) {
             if (lanePressed[i]) {
-                fill(150);
+                let tmp = buttonPressedArr[i]
+                tmp.resize(150, 110)
+                image(tmp, laneStartX[i]-75, laneStartY)
             } else {
-                fill(255);
+                let tmp = buttonBasicArr[i]
+                tmp.resize(150, 110)
+                image(tmp, laneStartX[i]-75, laneStartY)
+
             }
-            rect(laneStartX[i], laneStartY, 100, 50);
-            textSize(30);
-            fill(0);
-            text(laneText[i], laneStartX[i], laneStartY+10);
         }
     }
 
     drawStatistics() {
         textSize(40);
         fill(255);
+        textAlign(LEFT);
         text("hit: " + this.hit, 800, 50);
         text("miss: " + this.miss, 800, 100);
+        textAlign(CENTER);
+    }
+
+    hitAndMiss() {
+        textSize(100)
+        if (this.lastHitTime > this.lastMissTime) {
+            fill(255, this.lastHitTime*10);
+            text("Hit!", width/2, 350);
+            this.lastHitTime--;
+            this.lastMissTime = (this.lastMissTime != 0) ? this.lastMissTime - 1 : 0;
+        } else {
+            if (this.lastMissTime > 0) {
+                fill(255, 0, 0, this.lastMissTime*10);
+                text("Miss!", width/2, 350);
+                this.lastMissTime--;
+                this.lastHitTime = (this.lastHitTime != 0) ? this.lastHitTime - 1 : 0;
+            }
+        }
     }
 
     startButtonClicked() {
