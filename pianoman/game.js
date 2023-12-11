@@ -60,6 +60,7 @@ let lanePressed = [0, 0, 0, 0];
 
 let bpms = [500, 470, 466, 458]; //한 박자 시간
 let startDelayArr = [3000, 3000, 3000, 3000]; //첫 노트가 나온 후 음악이 시작되기 까지의 시간
+let textDisplayedTime = 25;
 
 class Game {
 
@@ -138,7 +139,7 @@ class Game {
             if (oldestNote.y - oldestNote.height/2 > laneDetected) {
                 this.displayedNotes.shift(); //가장 오래된 노트 삭제
                 this.miss++; //miss 횟수 증가
-                this.lastMissTime = 10;
+                this.lastMissTime = textDisplayedTime;
             }
         }
     }
@@ -204,6 +205,7 @@ class Game {
     }
 
     detectCollision() {
+        let deletedNoteIdx = [];
         for (let i = 0; i < this.displayedNotes.length; i++) { //가장 오래된 노트부터 살핌
             let checkNote = this.displayedNotes[i];
 
@@ -214,14 +216,18 @@ class Game {
             for (let lane = 0; lane < 4; lane++) {
                 if (lanePressed[lane]) { //해당 레인이 눌러져 있다면
                     if (checkNote.checkHit(lane)) { //노트가 레인에 닿았다면
-                        this.displayedNotes.splice(i, 1); //노트 삭제
+                        //this.displayedNotes.splice(i, 1); //노트 삭제
+                        deletedNoteIdx.push(i);
                         this.hit++; //hit 횟수 증가
-                        this.lastHitTime = 10;
-                        break; //더 이상 확인할 필요 없음
+                        this.lastHitTime = textDisplayedTime;
+                        break; //이 노트를 더 이상 확인할 필요 없음
                     }
                 }
             }
-        }   
+        }
+        for (let i = deletedNoteIdx.length - 1; i >= 0; i--) {
+            this.displayedNotes.splice(deletedNoteIdx[i], 1);
+        }
     }
 
     buttonPressed(lane) { //key가 눌려지면 실행
@@ -258,20 +264,22 @@ class Game {
     drawStatistics() {
         textSize(40);
         fill(255);
+        textAlign(LEFT);
         text("hit: " + this.hit, 800, 50);
         text("miss: " + this.miss, 800, 100);
+        textAlign(CENTER);
     }
 
     hitAndMiss() {
         textSize(100)
         if (this.lastHitTime > this.lastMissTime) {
-            fill(255);
+            fill(255, this.lastHitTime*10);
             text("Hit!", width/2, 350);
             this.lastHitTime--;
             this.lastMissTime = (this.lastMissTime != 0) ? this.lastMissTime - 1 : 0;
         } else {
             if (this.lastMissTime > 0) {
-                fill(255, 0, 0);
+                fill(255, 0, 0, this.lastMissTime*10);
                 text("Miss!", width/2, 350);
                 this.lastMissTime--;
                 this.lastHitTime = (this.lastHitTime != 0) ? this.lastHitTime - 1 : 0;

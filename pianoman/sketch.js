@@ -40,6 +40,7 @@ let isRightKeyPressed = false;
 
 let buttonBasicArr = []
 let buttonPressedArr = []
+let notePngArr = []
 
 
 function preload() {
@@ -88,6 +89,8 @@ function preload() {
     let npc = new NPC(i, basic, success);
     NPCs[i] = npc;
     console.log(NPCs[i]);
+    let notePng = loadImage('images/button/선물버튼' + (i+1) + '.png');
+    notePngArr[i] = notePng;
   }
 
   playerPng = loadImage('images/NPC/주인공 3인칭(기본).png');
