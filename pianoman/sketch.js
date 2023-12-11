@@ -47,6 +47,8 @@ let songArr = []
 let selectableNPC = -1;
 let heart;
 
+let missionAccepted = 0;
+
 
 function preload() {
   //이미지 불러오기
@@ -242,7 +244,7 @@ function drawNPCs() {
     if (NPC_completed[i] == 1) {
       let heartPng = heart;
       heartPng.resize(50, 50);
-      image(heartPng, NPC_position[i][0]+NPC_w/2, NPC_position[i][1] - 50)
+      image(heartPng, NPC_position[i][0]+25, NPC_position[i][1] - 50)
     }
     image(img, NPC_position[i][0], NPC_position[i][1]);
   }
