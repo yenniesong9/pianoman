@@ -138,6 +138,7 @@ class Game {
             if (oldestNote.y - oldestNote.height/2 > laneDetected) {
                 this.displayedNotes.shift(); //가장 오래된 노트 삭제
                 this.miss++; //miss 횟수 증가
+                this.lastMissTime = 10;
             }
         }
     }
@@ -149,6 +150,7 @@ class Game {
                     this.addNote(); //새 노트 업데이트
                     this.deleteNote();
                     this.detectCollision();
+                    this.hitAndMiss();
 
                     //디스플레이
                     //console.log(this.displayedNotes);
@@ -214,9 +216,7 @@ class Game {
                     if (checkNote.checkHit(lane)) { //노트가 레인에 닿았다면
                         this.displayedNotes.splice(i, 1); //노트 삭제
                         this.hit++; //hit 횟수 증가
-                        fill(255);
-                        textSize(100);
-                        text("hit", width/2, 400);
+                        this.lastHitTime = 10;
                         break; //더 이상 확인할 필요 없음
                     }
                 }
@@ -260,6 +260,23 @@ class Game {
         fill(255);
         text("hit: " + this.hit, 800, 50);
         text("miss: " + this.miss, 800, 100);
+    }
+
+    hitAndMiss() {
+        textSize(100)
+        if (this.lastHitTime > this.lastMissTime) {
+            fill(255);
+            text("Hit!", width/2, 350);
+            this.lastHitTime--;
+            this.lastMissTime = (this.lastMissTime != 0) ? this.lastMissTime - 1 : 0;
+        } else {
+            if (this.lastMissTime > 0) {
+                fill(255, 0, 0);
+                text("Miss!", width/2, 350);
+                this.lastMissTime--;
+                this.lastHitTime = (this.lastHitTime != 0) ? this.lastHitTime - 1 : 0;
+            }
+        }
     }
 
     startButtonClicked() {
