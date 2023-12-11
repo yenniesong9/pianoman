@@ -18,6 +18,7 @@ let playingNPC;
 
 //lobby에 표시하는 용
 let NPC_pngs = []; //npc 이미지 저장
+let NPC_choose = []; //npc 스트로크 이미지 저장
 let NPC_position = [[260, 330], [640, 250], [780, 470], [180,650]]; //npc 위치 저장
 let NPC_w = 100; //화면에 표시하는 크기
 let NPC_h = 130;
@@ -72,6 +73,9 @@ function preload() {
     let title = 'images/NPC/손님' + (i+1) + ' 3인칭(기본).png';
     let pixel = loadImage(title);
     NPC_pngs[i] = pixel;
+    let stroke = 'images/NPC/손님' + (i+1) + ' 3인칭(스트로크).png';
+    let choose = loadImage(stroke);
+    NPC_choose[i] = choose;
     let basic = loadImage('images/NPC/손님' + (i+1) + '기본(픽셀화).png');
     let success = loadImage('images/NPC/손님' + (i+1) + '성공(픽셀화).png');
     let npc = new NPC(i, basic, success);
@@ -96,8 +100,8 @@ function setup() {
   bg_h = bg_main.height;
   createCanvas(bg_w, bg_h);
 
-  //song_lobby.play();
-  //song_lobby.setLoop(true);
+  song_lobby.play();
+  song_lobby.setLoop(true);
 
   //mode 초기화
   rectMode(CENTER);
@@ -113,7 +117,13 @@ function setup() {
 
 function draw() {
   //console.log(playingNPC);
-  if (stage == 0) { 
+  if (stage == 0) {
+  //draw함수 안에서 음악 로드하는 방법 없을까
+    /*let loaded = false;
+    if (frameCount === 1 && !loaded) {
+    song_lobby.play();
+    loaded = true; // 이후로는 다시 로드되지 않도록 플래그 설정
+    }*/
     lobby();
   } else if (stage == 1){
     talk_npc();
@@ -130,13 +140,6 @@ function lobby() {
   image(bg_main,0,0);
   key_default.resize(250,250);
   image(key_default,760,800);
-
-  //음악 로드
-  let loaded = false;
-  if (frameCount === 1 && !loaded) {
-  song_lobby.play();
-  loaded = true; // 이후로는 다시 로드되지 않도록 플래그 설정
-  }
 
   //player 위치 조정 & 방향키 누름 표시
   if (isUpKeyPressed) {
@@ -161,15 +164,19 @@ function lobby() {
   }
 
   //-------------------------위치 제한-----------------------//
-  //벽
+  //외벽
   plX = constrain(plX, 150, width-200);
   plY = constrain(plY, 60, height-150);
 
-  if(plX < 700 && plX > 400 && plY < 150 && plY > 100) isDownKeyPressed = false;
-  if(plX > 660 && plY > 650){
-    isRightKeyPressed = false;
+  if (plX < 700 && plX > 400 && plY < 150 && plY > 100){
     isDownKeyPressed = false;
   }
+  if (plX > 650 && plY > 670 || plX < 400 && plY > 670){
+    isDownKeyPressed = false;
+    if(plX > 650) isRightKeyPressed = false;
+    if(plX < 400) isLeftKeyPressed = false;
+  }
+
   
   //미니테이블
   image(minitable,180,290);
@@ -243,30 +250,18 @@ function lobby() {
 
   //npc 그리기
   drawNPCs();
-  //player 그리기
-  drawPlayer();
-
-  //player가 밑으로 지나가야 하는 오브젝트 모음
-  piano.resize(300-20, 290-5);
-  shelf.resize(94-5, 204-5);
-  image(piano,320,475);
-  image(bigplanttop,716,368);
-  image(smallplant,690,650);
-  image(shelf,570,179);
-  //image(tabletop,410,365);
 
   let selectableNPC = nearNPCs();
-
   if (selectableNPC != -1) { //npc 근처에 있다면
-    //TODO: 스트로크 표시
-    //지금은 circle로 대체
-    noStroke();
-    fill(255);
-    circle(NPC_position[selectableNPC][0], NPC_position[selectableNPC][1],30,30);
+    //스트로크 표시
+    let img = NPC_choose[selectableNPC];
+    img.resize(NPC_w, NPC_h);
+    image(img, NPC_position[selectableNPC][0], NPC_position[selectableNPC][1]);
     
     //npc 옆 글씨로 키 누를 것을 안내
     key_shift.resize(100, 50);
     image(key_shift,plX, plY - 45);
+
     //쉬프트 누르면 스테이지 1로 이동
     //여러번 호출되는 문제가 발생. 한 번만 호출되도록 수정 필요할 수도 있음.
     if (keyIsDown(SHIFT)){
@@ -275,6 +270,17 @@ function lobby() {
       console.log("selectabel num: " , selectableNPC);
     }
   }
+    //player 그리기
+    drawPlayer();
+
+    //player가 밑으로 지나가야 하는 오브젝트 모음
+    piano.resize(300-20, 290-5);
+    shelf.resize(94-5, 204-5);
+    image(piano,320,475);
+    image(bigplanttop,716,368);
+    image(smallplant,690,650);
+    image(shelf,570,179);
+    //image(tabletop,410,365);
 }
 
 function talk_npc(){
