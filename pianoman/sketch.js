@@ -49,14 +49,15 @@ let heart;
 let arrow;
 let bartenderPng;
 let bartenderPng2;
-let bartenderScript = ["아 피아노맨! 드디어 왔는가?", "크리스마스에 갑자기 무슨 일이냐고? 휴...", "좋은 날에 우울한 손님들이 너무 많이 왔어.", 
-                      "그래서 말인데, 너가 좀 도와줄 수 있을까?", "손님들에게 피아노를 연주해드리는 거야!", "피아노는 위에서 내려오는 노트에 맞춰서\nD, F, J, K를 눌러서 연주할 수 있어.", "몇 명한테 연주해줘야 하냐고? 흠...\n적어도 두분한테는 연주해줘.", "그래, 부탁한다고 피아노맨!!"]
+let bartenderScript = ["어, 그래! 당신이 오늘부터 함께 일하게 된 피아노맨이군.", "크리스마스인데 왜 표정이 안 좋냐고? 휴...", "오늘 같이 특별한 밤에 슬퍼보이는 손님이 많아\n걱정이 이만저만이 아냐.", 
+                      "그래서 말인데, 네가 좀 도와줄 수 있을까?", "당신의 연주로 손님들을 기쁘게 해주는 거야!", "피아노는 위에서 내려오는 노트에 맞춰서\nD, F, J, K를 눌러서 연주할 수 있어.",
+                      "몇 명한테 연주해줘야 하냐고? 흠...\n적어도 두 분한테는 연주해줘.", "그래, 그럼 부탁할게 피아노맨!"]
 let missionPointer = -1;
 let cabin;
 let startButton;
 let startButtonClicked;
 
-let missionCompleteScript = ["고마워 피아노맨!", "너 덕분에 한 숨 돌렸어"];
+let missionCompleteScript = ["오늘 첫 출근이라 걱정이 많았는데,", "당신 덕분에 손님들도 즐거워하고,\n우리 바가 더 따뜻해진 거 같군!", "덕분에 나와 손님들 모두 좋은 크리스마스 추억을 만들 수 있었어.", "그럼 당신도 행복한 크리스마스를 보내라고~! 하하하"];
 let completePointer = -1;
 
 
@@ -201,8 +202,10 @@ function missionFinished() {
   image(shelf,570,179);
   //image(tabletop,410,365);
 
+  noStroke();
   fill(0, 150);
   rect(width/2, height/2, width, height);
+  rect(width/2, 750, width - 100, 200);
   image(bartenderPng2, 350, 100);
   fill(255);
   textSize(30);
@@ -266,8 +269,10 @@ function bartender() {
   //image(tabletop,410,365);
 
   if (missionPointer != -1) {
+    noStroke();
     fill(0, 150);
     rect(width/2, height/2, width, height);
+    rect(width/2, 750, width - 100, 200);
     image(bartenderPng2, 300, 100);
     fill(255);
     textSize(30);
