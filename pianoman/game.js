@@ -58,7 +58,7 @@ let levelArr = ["★", "★★", "★★★", "★★★★"]
 let laneText = ["D", "F", "J", "K"];
 let lanePressed = [0, 0, 0, 0];
 
-let bpms = [502, 475, 466, 460]; //한 박자 시간
+let bpms = [502, 475, 466, 462]; //한 박자 시간
 let startDelayArr = [2800, 2800, 2800, 2800]; //첫 노트가 나온 후 음악이 시작되기 까지의 시간
 let textDisplayedTime = 25;
 
