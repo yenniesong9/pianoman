@@ -428,6 +428,11 @@ function movePlayer() {
   if(plX < 700 && plX > 400 && plY < 150 && plY > 100){
     isDownKeyPressed = false;
   }
+  if(plX < 400 && plY > 680 || plX > 650 && plY > 680){
+    isDownKeyPressed = false;
+    if(plX < 400) isLeftKeyPressed = false;
+    if(plX > 650) isRightKeyPressed = false;
+  }
   
   //미니테이블
   image(minitable,180,290);
@@ -454,12 +459,14 @@ function movePlayer() {
     plY < 365 + table.height - NPC_h + 10 && plY > 365 - 100
     ) {
       isRightKeyPressed = false; // 부딪히면 방향키 비활성화
+      isUpKeyPressed = false;
       isDownKeyPressed = false;
     } else if (
     plX < 410 + 20 + table.width - NPC_w/2 && plX >= 410 + table.width/2 &&
     plY < 365 + table.height - NPC_h + 10 && plY > 365 - 100
     ) {
       isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
+      isUpKeyPressed = false;
       isDownKeyPressed = false;
     }
 
@@ -472,16 +479,15 @@ function movePlayer() {
     ) {
       isRightKeyPressed = false; // 부딪히면 방향키 비활성화
       isUpKeyPressed = false;
-      //isDownKeyPressed = false;
-      //plY = 475 - NPC_h/2; // 부딪히면 좌표 재지정
+      isDownKeyPressed = false;
+
     } else if (
     plX < 320 + 10 + pianobottom.width - NPC_w/2 && plX >= 320 + pianobottom.width/2 &&
     plY < 475 + pianobottom.height - NPC_h + 10 && plY > 475 - NPC_h/2
     ) {
       isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
       isUpKeyPressed = false;
-      //isDownKeyPressed = false;
-      //plX = 320 + 10 + pianobottom.width - NPC_w/2  // 부딪히면 좌표 재지정
+      isDownKeyPressed = false;
     }
 
   //빅식물
@@ -498,9 +504,12 @@ function movePlayer() {
 
   ///미니식물
   image(smallplant,690,650);
-  if (plX > 690 && plX < 690 + smallplant.width/2 && plY > 650) plY = 650;
+  if (plX > 690 - 10 && plX < 690 + smallplant.width/2 && plY > 640 && plY < 690) {
+    //isRightKeyPressed = false;
+    plY = 650;
+  }
   else if (plX >= 690 + smallplant.width/2 &&
-  plX < 690 + smallplant.width && plY > 650) plX = plX;
+  plX < 690 + smallplant.width - 10 && plY > 640 && plY < 690) isLeftKeyPressed = false;
 
 }
 
