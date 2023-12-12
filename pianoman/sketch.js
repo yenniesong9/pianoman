@@ -50,13 +50,13 @@ let arrow;
 let bartenderPng;
 let bartenderPng2;
 let bartenderScript = ["아 피아노맨! 드디어 왔는가?", "크리스마스에 갑자기 무슨 일이냐고? 휴...", "좋은 날에 우울한 손님들이 너무 많이 왔어.", 
-                      "그래서 말인데, 너가 좀 도와줄 수 있을까?", "손님들에게 피아노를 연주해드리는 거야!", "피아노는 위에서 내려오는 노트에 맞춰서\nD, F, J, K를 눌러서 연주할 수 있어.", "몇 명한테 연주해줘야 하냐고? 흠...\n적어도 두분한테는 연주해줘.", "그래, 부탁한다고 피아노맨!!"]
+                      "그래서 말인데, 너가 좀 도와줄 수 있을까?", "손님들에게 피아노를 연주해드리는 거야!", "피아노는 위에서 내려오는 노트에 맞춰서\nD, F, J, K를 눌러서 연주할 수 있어.", "전체 노트의 80% 이상만 맞추면 된다고", "몇 명한테 연주해줘야 하냐고? 흠...\n적어도 두분한테는 연주해줘.", "그래, 부탁한다고 피아노맨!!"]
 let missionPointer = -1;
 let cabin;
 let startButton;
 let startButtonClicked;
 
-let missionCompleteScript = ["고마워 피아노맨!", "너 덕분에 한 숨 돌렸어"];
+let missionCompleteScript = ["고마워 피아노맨!", "너 덕분에 한숨 돌렸어"];
 let completePointer = -1;
 
 
