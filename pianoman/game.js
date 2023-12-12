@@ -152,9 +152,10 @@ class Game {
 
                     //디스플레이
                     //console.log(this.displayedNotes);
+                    let curTime = millis();
                     for (let note of this.displayedNotes) {
                         note.display();
-                        note.y = (millis()-this.startTime-note.timing*this.bpm)/3000*965 - 50;
+                        note.y = (curTime-this.startTime-note.timing*this.bpm)/3000*965 - 50;
                     }
 
                     this.song.onended(() => {
