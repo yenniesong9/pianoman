@@ -175,47 +175,12 @@ function draw() {
     fail();
   } else if (stage == 5){ //전체 성공
     missionFinished();
+  } else if (stage == 6) {
+    ending();
   }
 }
 
 //--------------- 각 스테이지 별 함수들 -----------------//
-function missionFinished() {
-  image(bg_main,0,0);
-  key_default.resize(250,250);
-  image(key_default,760,800);
-  let tmpBart = bartenderPng;
-  tmpBart.resize(100,200);
-  image(tmpBart, 450, 100);
-
-  //플레이어 움직이기
-  movePlayer();
-  //npc 그리기
-  drawNPCs();
-  //player 그리기
-  drawPlayer();
-  //player가 밑으로 지나가야 하는 오브젝트 모음
-  piano.resize(300-20, 290-5);
-  shelf.resize(94-5, 204-5);
-  image(piano,320,475);
-  image(bigplanttop,716,368);
-  image(smallplant,690,650);
-  image(shelf,570,179);
-  //image(tabletop,410,365);
-
-  noStroke();
-  fill(0, 150);
-  rect(width/2, height/2, width, height);
-  rect(width/2, 750, width - 100, 200);
-  image(bartenderPng2, 350, 100);
-  fill(255);
-  textSize(30);
-  text(missionCompleteScript[completePointer], width/2, 750);
-  let button1 = new Button(880-75, 920-37.5);
-  button1.setTitle("다음으로");
-  button1.show();
-  
-}
-
 function beforeStart() {
   image(cabin, 0, -300);
   fill(255);
@@ -267,6 +232,7 @@ function bartender() {
   image(smallplant,690,650);
   image(shelf,570,179);
   //image(tabletop,410,365);
+
 
   if (missionPointer != -1) {
     noStroke();
@@ -357,6 +323,69 @@ function fail() {
   fill(255);
   textSize(28);
   playingNPC.display();
+}
+
+function missionFinished() {
+  console.log(completePointer);
+  image(bg_main,0,0);
+  key_default.resize(250,250);
+  image(key_default,760,800);
+  let tmpBart = bartenderPng;
+  tmpBart.resize(NPC_w, NPC_h);
+  image(tmpBart, 450, 150);
+  arrow.resize(100, 80);
+  image(arrow, 450, 70);
+
+  //플레이어 움직이기
+  movePlayer();
+  //npc 그리기
+  drawNPCs();
+  //player 그리기
+  drawPlayer();
+
+  if (plX > 400 && plX < 530 && plY > 0 && plY < 350) {
+    key_shift.resize(100, 50);
+    image(key_shift,plX, plY - 45);
+    if (keyIsDown(SHIFT)){
+      completePointer = 0;
+    }
+  }
+
+  //player가 밑으로 지나가야 하는 오브젝트 모음
+  piano.resize(300-20, 290-5);
+  shelf.resize(94-5, 204-5);
+  image(piano,320,475);
+  image(bigplanttop,716,368);
+  image(smallplant,690,650);
+  image(shelf,570,179);
+  //image(tabletop,410,365);
+
+  
+
+  if (completePointer != -1) {
+    noStroke();
+    fill(0, 150);
+    rect(width/2, height/2, width, height);
+    rect(width/2, 750, width - 100, 200);
+    image(bartenderPng2, 350, 100);
+    fill(255);
+    textSize(30);
+    text(missionCompleteScript[completePointer], width/2, 750);
+    let button1 = new Button(880-75, 920-37.5);
+    if (completePointer == missionCompleteScript.length - 1) {
+      button1.setTitle("엔딩으로");
+    } else {
+      button1.setTitle("다음으로");
+    }
+    button1.show();
+  }
+}
+
+function ending() {
+  image(cabin, 0, -300);
+  fill(255);
+  textSize(100);
+  text("임시 엔딩", 512, 300);
 }
 
 //--------------- 함수 내부에서 추가적으로 사용되는 함수들 -----------------//
@@ -544,7 +573,7 @@ function mouseClicked() {
           games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
           playingNPC.scriptPointer = 0;
         }
-        if (success_count == 2) {
+        if (success_count == 4) { //전부 성공 시 엔딩 페이지로
           stage = 5;
         } else {
           stage = 0;
@@ -588,10 +617,10 @@ function mouseClicked() {
     }
   }
 
-  if (stage == 5) {
+  if (stage == 5 && completePointer != -1) {
     if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
       if (completePointer == missionCompleteScript.length - 1) {
-        stage = 0; //로비로
+        stage = 6; //엔딩 화면
       }
       completePointer++;
     }
@@ -619,6 +648,10 @@ function keyPressed() {
     isLeftKeyPressed = true;
   } else if (keyCode === RIGHT_ARROW) {
     isRightKeyPressed = true;
+  }
+
+  if (keyCode == 82) {
+    stage = 5;
   }
 }
 
