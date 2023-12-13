@@ -87,6 +87,7 @@ class Game {
 
         this.lastHitTime = 0;
         this.lastMissTime = 0;
+        this.combo = 0;
     }
 
     start() { //외부에서 플레이 버튼을 눌렀을 때 실행. 게임 시작
@@ -136,6 +137,7 @@ class Game {
             if (oldestNote.y - oldestNote.height/2 > laneDetected) {
                 this.displayedNotes.shift(); //가장 오래된 노트 삭제
                 this.miss++; //miss 횟수 증가
+                this.combo = 0;
                 this.lastMissTime = textDisplayedTime;
             }
         }
@@ -225,6 +227,7 @@ class Game {
                         //this.displayedNotes.splice(i, 1); //노트 삭제
                         deletedNoteIdx.push(i);
                         this.hit++; //hit 횟수 증가
+                        this.combo++;
                         this.lastHitTime = textDisplayedTime;
                         break; //이 노트를 더 이상 확인할 필요 없음
                     }
@@ -279,14 +282,19 @@ class Game {
     hitAndMiss() {
         textSize(100)
         if (this.lastHitTime > this.lastMissTime) {
-            fill(255, this.lastHitTime*10);
-            text("Hit!", width/2, 350);
+            if (this.combo > 2) {
+                fill(255, 255, 0, this.lastHitTime*10);
+                text("COMBO " + this.combo + "!", width/2, 600);
+            } else {
+                fill(255, this.lastHitTime*10);
+                text("HIT!", width/2, 600);
+            }
             this.lastHitTime--;
             this.lastMissTime = (this.lastMissTime != 0) ? this.lastMissTime - 1 : 0;
         } else {
             if (this.lastMissTime > 0) {
                 fill(255, 0, 0, this.lastMissTime*10);
-                text("Miss!", width/2, 350);
+                text("MISS!", width/2, 600);
                 this.lastMissTime--;
                 this.lastHitTime = (this.lastHitTime != 0) ? this.lastHitTime - 1 : 0;
             }
