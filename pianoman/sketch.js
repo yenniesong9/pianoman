@@ -178,6 +178,10 @@ function draw() {
   } else if (stage == 6) {
     ending();
   }
+
+  if (stage == 0 || (stage == -1 && missionPointer < 0) || (stage == 5&&completePointer < 0)) {
+    drawResetButton();
+  }
 }
 
 //--------------- 각 스테이지 별 함수들 -----------------//
@@ -326,7 +330,6 @@ function fail() {
 }
 
 function missionFinished() {
-  console.log(completePointer);
   image(bg_main,0,0);
   key_default.resize(250,250);
   image(key_default,760,800);
@@ -538,6 +541,13 @@ function movePlayer() {
 
 }
 
+function drawResetButton() {
+  let button1 = new Button(150, 900);
+  button1.setTitle("처음으로");
+  button1.show();
+
+}
+
 //--------------- 외부 입력과 관련된 함수들 -----------------//
 
 function mouseClicked() {
@@ -625,6 +635,12 @@ function mouseClicked() {
       completePointer++;
     }
   }
+
+  if (stage == 0 || (stage == -1 && missionPointer < 0) || (stage == 5&&completePointer < 0)) { //재시작
+    if (mouseX > 150 && mouseX < 300 && mouseY > 900 && mouseY < 975) {
+      window.location.reload();
+    }
+  }
 }
 
 function keyPressed() {
@@ -648,10 +664,6 @@ function keyPressed() {
     isLeftKeyPressed = true;
   } else if (keyCode === RIGHT_ARROW) {
     isRightKeyPressed = true;
-  }
-
-  if (keyCode == 82) {
-    stage = 5;
   }
 }
 
