@@ -6,7 +6,7 @@ let key_up, key_down, key_left, key_right;
 let pixelFont;
 
 ///스테이지 구분
-let stage = 0; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
+let stage = -2; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
 
 ///NPC 관련 변수
 let NPC_count = 4; //TODO: 향후 수정 필요
@@ -46,8 +46,19 @@ let songArr = []
 
 let selectableNPC = -1;
 let heart;
+let arrow;
+let bartenderPng;
+let bartenderPng2;
+let bartenderScript = ["어, 그래! 당신이 오늘부터 함께 일하게 된 피아노맨이군.", "크리스마스인데 왜 표정이 안 좋냐고? 휴...", "오늘 같이 특별한 밤에 슬퍼보이는 손님이 많아\n걱정이 이만저만이 아냐.", 
+                      "그래서 말인데, 네가 좀 도와줄 수 있을까?", "당신의 연주로 손님들을 기쁘게 해주는 거야!", "피아노는 위에서 내려오는 노트에 맞춰서\nD, F, J, K를 눌러서 연주할 수 있어.",
+                      "몇 명한테 연주해줘야 하냐고? 흠...\n적어도 두 분한테는 연주해줘.", "그래, 그럼 부탁할게 피아노맨!"]
+let missionPointer = -1;
+let cabin;
+let startButton;
+let startButtonClicked;
 
-let missionAccepted = 0;
+let missionCompleteScript = ["오늘 첫 출근이라 걱정이 많았는데,", "당신 덕분에 손님들도 즐거워하고,\n우리 바가 더 따뜻해진 거 같군!", "덕분에 나와 손님들 모두\n좋은 크리스마스 추억을 만들 수 있었어.", "그럼 당신도 행복한 크리스마스를 보내라고~! 하하하"];
+let completePointer = -1;
 
 
 function preload() {
@@ -104,7 +115,13 @@ function preload() {
   }
 
   playerPng = loadImage('images/NPC/주인공 3인칭(기본).png');
-  heart = loadImage('images/background/heart.png');
+  heart = loadImage('images/NPC/하트.png');
+  arrow = loadImage('images/NPC/화살표.png');
+  bartenderPng = loadImage('images/NPC/바텐더 3인칭(기본).png')
+  bartenderPng2 = loadImage('images/NPC/바텐더 3인칭(기본).png')
+  cabin = loadImage('images/background/cabin.jpeg')
+  startButton = loadImage('images/button/대화창버튼기본.png');
+  startButtonClicked = loadImage('images/button/대화창버튼눌림.png')
 
   //음악 불러오기
   song0 = loadSound('audio/hbdhard2.mp3');
@@ -142,7 +159,11 @@ function setup() {
 
 function draw() {
   //console.log(playingNPC);
-  if (stage == 0) { 
+  if (stage == -2) {
+    beforeStart();
+  } else if (stage == -1) {
+    bartender();
+  } else if (stage == 0) { 
     lobby();
   } else if (stage == 1){
     talk_npc();
@@ -150,17 +171,126 @@ function draw() {
     rhythm();
   } else if (stage == 3){ //성공 스크립트 진행
     success();
-  } else if (stage == 4) { //실패 스크립트 진행
+  } else if (stage == 4){ //실패 스크립트 진행
     fail();
+  } else if (stage == 5){ //전체 성공
+    missionFinished();
   }
 }
 
 //--------------- 각 스테이지 별 함수들 -----------------//
+function missionFinished() {
+  image(bg_main,0,0);
+  key_default.resize(250,250);
+  image(key_default,760,800);
+  let tmpBart = bartenderPng;
+  tmpBart.resize(100,200);
+  image(tmpBart, 450, 100);
+
+  //플레이어 움직이기
+  movePlayer();
+  //npc 그리기
+  drawNPCs();
+  //player 그리기
+  drawPlayer();
+  //player가 밑으로 지나가야 하는 오브젝트 모음
+  piano.resize(300-20, 290-5);
+  shelf.resize(94-5, 204-5);
+  image(piano,320,475);
+  image(bigplanttop,716,368);
+  image(smallplant,690,650);
+  image(shelf,570,179);
+  //image(tabletop,410,365);
+
+  noStroke();
+  fill(0, 150);
+  rect(width/2, height/2, width, height);
+  rect(width/2, 750, width - 100, 200);
+  image(bartenderPng2, 350, 100);
+  fill(255);
+  textSize(30);
+  text(missionCompleteScript[completePointer], width/2, 750);
+  let button1 = new Button(880-75, 920-37.5);
+  button1.setTitle("다음으로");
+  button1.show();
+  
+}
+
+function beforeStart() {
+  image(cabin, 0, -300);
+  fill(255);
+  textSize(100);
+  text("Piano Man", 512, 300);
+  startButton.resize(250, 120);
+  startButtonClicked.resize(250, 120);
+  textSize(50);
+  if (mouseX > 380 && mouseX < 630 && mouseY > 450 && mouseY < 570) {
+    image(startButton, 380, 450);
+    fill(0);
+  } else {
+    image(startButtonClicked, 380, 450);
+    fill(255);
+  }
+  text("START", 512, 500);
+}
+
+function bartender() {
+  image(bg_main,0,0);
+  key_default.resize(250,250);
+  image(key_default,760,800);
+  let tmpBart = bartenderPng;
+  tmpBart.resize(NPC_w, NPC_h);
+  image(tmpBart, 450, 150);
+  arrow.resize(100, 80);
+  image(arrow, 450, 70);
+
+  //플레이어 움직이기
+  movePlayer();
+  //npc 그리기
+  drawNPCs();
+  //player 그리기
+  drawPlayer();
+
+  if (plX > 400 && plX < 530 && plY > 0 && plY < 350) {
+    key_shift.resize(100, 50);
+    image(key_shift,plX, plY - 45);
+    if (keyIsDown(SHIFT)){
+      missionPointer = 0;
+    }
+  }
+
+  //player가 밑으로 지나가야 하는 오브젝트 모음
+  piano.resize(300-20, 290-5);
+  shelf.resize(94-5, 204-5);
+  image(piano,320,475);
+  image(bigplanttop,716,368);
+  image(smallplant,690,650);
+  image(shelf,570,179);
+  //image(tabletop,410,365);
+
+  if (missionPointer != -1) {
+    noStroke();
+    fill(0, 150);
+    rect(width/2, height/2, width, height);
+    rect(width/2, 750, width - 100, 200);
+    image(bartenderPng2, 300, 100);
+    fill(255);
+    textSize(30);
+    text(bartenderScript[missionPointer], width/2, 750);
+    let button1 = new Button(880-75, 920-37.5);
+    button1.setTitle("다음으로");
+    button1.show();
+  } 
+}
 
 function lobby() {
   image(bg_main,0,0);
   key_default.resize(250,250);
   image(key_default,760,800);
+
+  let tmpBart = bartenderPng;
+  tmpBart.resize(NPC_w, NPC_h);
+  image(tmpBart, 450, 150);
 
   //플레이어 움직이기
   movePlayer();
@@ -298,6 +428,11 @@ function movePlayer() {
   if(plX < 700 && plX > 400 && plY < 150 && plY > 100){
     isDownKeyPressed = false;
   }
+  if(plX < 400 && plY > 680 || plX > 650 && plY > 680){
+    isDownKeyPressed = false;
+    if(plX < 400) isLeftKeyPressed = false;
+    if(plX > 650) isRightKeyPressed = false;
+  }
   
   //미니테이블
   image(minitable,180,290);
@@ -324,12 +459,14 @@ function movePlayer() {
     plY < 365 + table.height - NPC_h + 10 && plY > 365 - 100
     ) {
       isRightKeyPressed = false; // 부딪히면 방향키 비활성화
+      isUpKeyPressed = false;
       isDownKeyPressed = false;
     } else if (
     plX < 410 + 20 + table.width - NPC_w/2 && plX >= 410 + table.width/2 &&
     plY < 365 + table.height - NPC_h + 10 && plY > 365 - 100
     ) {
       isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
+      isUpKeyPressed = false;
       isDownKeyPressed = false;
     }
 
@@ -342,16 +479,15 @@ function movePlayer() {
     ) {
       isRightKeyPressed = false; // 부딪히면 방향키 비활성화
       isUpKeyPressed = false;
-      //isDownKeyPressed = false;
-      //plY = 475 - NPC_h/2; // 부딪히면 좌표 재지정
+      isDownKeyPressed = false;
+
     } else if (
     plX < 320 + 10 + pianobottom.width - NPC_w/2 && plX >= 320 + pianobottom.width/2 &&
     plY < 475 + pianobottom.height - NPC_h + 10 && plY > 475 - NPC_h/2
     ) {
       isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
       isUpKeyPressed = false;
-      //isDownKeyPressed = false;
-      //plX = 320 + 10 + pianobottom.width - NPC_w/2  // 부딪히면 좌표 재지정
+      isDownKeyPressed = false;
     }
 
   //빅식물
@@ -368,9 +504,12 @@ function movePlayer() {
 
   ///미니식물
   image(smallplant,690,650);
-  if (plX > 690 && plX < 690 + smallplant.width/2 && plY > 650) plY = 650;
+  if (plX > 690 - 10 && plX < 690 + smallplant.width/2 && plY > 640 && plY < 690) {
+    //isRightKeyPressed = false;
+    plY = 650;
+  }
   else if (plX >= 690 + smallplant.width/2 &&
-  plX < 690 + smallplant.width && plY > 650) plX = plX;
+  plX < 690 + smallplant.width - 10 && plY > 640 && plY < 690) isLeftKeyPressed = false;
 
 }
 
@@ -409,7 +548,11 @@ function mouseClicked() {
           games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
           playingNPC.scriptPointer = 0;
         }
-        stage = 0;
+        if (success_count == 2) {
+          stage = 5;
+        } else {
+          stage = 0;
+        }
       } else { //스크립트 진행
         playingNPC.updateScriptPointer();
       }
@@ -431,6 +574,30 @@ function mouseClicked() {
         stage = 4;
       }
       songLobby.play();
+    }
+  }
+
+  if (stage == -1 && missionPointer != -1) { //바텐더
+    if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
+      if (missionPointer == bartenderScript.length - 1) {
+        stage = 0;
+      }
+      missionPointer++;
+    }
+  }
+
+  if (stage == -2) {
+    if (mouseX > 380 && mouseX < 630 && mouseY > 450 && mouseY < 570) {
+      stage = -1;
+    }
+  }
+
+  if (stage == 5) {
+    if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
+      if (completePointer == missionCompleteScript.length - 1) {
+        stage = 0; //로비로
+      }
+      completePointer++;
     }
   }
 }

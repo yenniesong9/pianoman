@@ -49,7 +49,7 @@ let notes3 = [[3,0],[3,0.75],[1,1],[2,2],[2,2.75],[0,3],[0,4],[3,3.75],[2,5],[1,
 //npc4 -jinglebell
 
 let noteArr = [notes0, notes1, notes2, notes3];
-let songNameArr = ["Happy Birthday", "Something Never Change", "Memories", "Jingle Bell"]
+let songNameArr = ["Happy Birthday", "Some things Never Change", "Memories", "Jingle Bell"]
 let levelArr = ["★", "★★", "★★★", "★★★★"]
 
 let laneText = ["D", "F", "J", "K"];
@@ -152,9 +152,10 @@ class Game {
 
                     //디스플레이
                     //console.log(this.displayedNotes);
+                    let curTime = millis();
                     for (let note of this.displayedNotes) {
                         note.display();
-                        note.y = (millis()-this.startTime-note.timing*this.bpm)/3000*965 - 50;
+                        note.y = (curTime-this.startTime-note.timing*this.bpm)/3000*965 - 50;
                     }
 
                     this.song.onended(() => {
