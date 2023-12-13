@@ -323,10 +323,6 @@ function lobby() {
       console.log("selectabel num: " , selectableNPC);
     }
   }
-
-  textSize(20);
-  fill(255);
-  text("성공한 손님 수: " + success_count, 230, 950);
 }
 
 function talk_npc() {
