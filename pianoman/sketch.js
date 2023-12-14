@@ -64,7 +64,12 @@ let cabin;
 let startButton;
 let startButtonClicked;
 
-let missionCompleteScript = ["오늘 첫 출근이라 걱정이 많았는데,", "당신 덕분에 손님들도 즐거워하고,\n우리 바가 더 따뜻해진 거 같군!", "덕분에 나와 손님들 모두\n좋은 크리스마스 추억을 만들 수 있었어.", "그럼 당신도 행복한 크리스마스를 보내라고~! 하하하"];
+let missionCompleteScript = 
+  ["오늘 첫 출근이라 걱정이 많았는데,", 
+"당신 덕분에 손님들도 즐거워하고,\n우리 바가 더 따뜻해진 것 같군!",
+"오늘치 일당만큼은 일을 다 했으니 이만 퇴근해도 좋아.",
+"하지만 남아서 피아노를 더 연주하고 싶다면 얼마든지 그래도 돼. \n우리 바는 항상 열려있거든."
+];
 let completePointer = -1;
 
 
