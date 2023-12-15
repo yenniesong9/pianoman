@@ -10,7 +10,7 @@ class Button {
     }
     over() {
       if (this.x < mouseX && mouseX < this.x + this.w 
-      && this.y < mouseY && mouseY < this.y + this.h) {
+      && this.y < mouseY && mouseY < this.y + this.h || keyIsDown(32)) {
         return true;
       } else {
         return false;

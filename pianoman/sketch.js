@@ -6,7 +6,9 @@ let key_up, key_down, key_left, key_right;
 let pixelFont;
 
 ///스테이지 구분
-let stage = 0; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
+let stage = -3;
+// -3: 시작화면, -2: 게임소개멘트, -1: 바텐더화면
+// 0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패, 5: 2명성공, 6: 4명 성공
 
 ///NPC 관련 변수
 let NPC_count = 4; //TODO: 향후 수정 필요
@@ -43,7 +45,9 @@ let buttonBasicArr = []
 let buttonPressedArr = []
 let notePngArr = []
 let songArr = []
+let bubbleArr = []
 
+let introScript = "거리 곳곳에서 신나는 캐롤이 울리고,\n집집마다 형형색색의 트리가 반짝이는 오늘은 크리스마스.\n\n당신은 오늘 이 바에 첫 출근을 하게 된 피아노맨입니다.\n\n바에 있는 손님들의 사연을 듣고,\n이에 맞는 음악을 연주해 손님을 위로해주세요."
 let selectableNPC = -1;
 let heart;
 let arrow;
@@ -107,6 +111,11 @@ function preload() {
   buttonBasicArr[3] = loadImage('images/button/K버튼 기본.png')
   buttonPressedArr[3] = loadImage('images/button/K버튼 눌림.png')
   
+  bubbleArr[0] = loadImage('images/button/말풍선_good.png');
+  bubbleArr[1] = loadImage('images/button/말풍선_great.png');
+  bubbleArr[2] = loadImage('images/button/말풍선_thanks.png');
+  bubbleArr[3] = loadImage('images/button/말풍선_wow.png');
+
   for (let i = 0; i < NPC_count; i++) {
     console.log(i);
     let title = 'images/NPC/손님' + (i+1) + ' 3인칭(기본).png'
@@ -116,8 +125,9 @@ function preload() {
     let choose = loadImage(stroke);
     NPC_choose[i] = choose;
     let basic = loadImage('images/NPC/손님' + (i+1) + '기본(픽셀화).png');
+    let basic2 = loadImage('images/NPC/손님' + (i+1) + '말(픽셀화).png');
     let success = loadImage('images/NPC/손님' + (i+1) + '성공(픽셀화).png');
-    let npc = new NPC(i, basic, success);
+    let npc = new NPC(i, basic, basic2, success);
     NPCs[i] = npc;
     console.log(NPCs[i]);
     let notePng = loadImage('images/button/선물버튼' + (i+1) + '.png');
@@ -129,9 +139,12 @@ function preload() {
   arrow = loadImage('images/NPC/화살표.png');
   bartenderPng = loadImage('images/NPC/바텐더 3인칭(기본).png')
   bartenderPng2 = loadImage('images/NPC/바텐더 3인칭(기본).png')
+  endingPlayer = loadImage('images/NPC/엔딩배경.png')
+  endingFrame = loadImage('images/NPC/엔딩프레임.png')
   cabin = loadImage('images/background/cabin.jpeg')
+  tree = loadImage('images/background/tree.jpeg')
   startButton = loadImage('images/button/대화창버튼기본.png');
-  startButtonClicked = loadImage('images/button/대화창버튼눌림.png')
+  startButtonClicked = loadImage('images/button/대화창버튼눌림.png');
 
   //음악 불러오기
   song0 = loadSound('audio/hbdhard2.mp3');
@@ -169,8 +182,10 @@ function setup() {
 
 function draw() {
   //console.log(playingNPC);
-  if (stage == -2) {
+  if (stage == -3) {
     beforeStart();
+  } else if (stage == -2) {
+    intro();
   } else if (stage == -1) {
     bartender();
   } else if (stage == 0) { 
@@ -204,13 +219,53 @@ function beforeStart() {
   startButtonClicked.resize(250, 120);
   textSize(50);
   if (mouseX > 380 && mouseX < 630 && mouseY > 450 && mouseY < 570) {
-    image(startButton, 380, 450);
-    fill(0);
-  } else {
     image(startButtonClicked, 380, 450);
     fill(255);
+  } else {
+    image(startButton, 380, 450);
+    fill(0);
   }
+  noStroke();
   text("START", 512, 500);
+
+  //fill(0,200);
+  //rect(width/2,640,350,80);
+  stroke(0);
+  strokeWeight(3);
+  fill(255);
+  textSize(36);
+  text("press SPACEBAR or\nclick button to start",512,635);
+}
+
+function intro() {
+  tree.resize(1029*1.5, 772*1.5);
+  image(tree, 0, 0);
+
+  fill(0, 150);
+  rect(width/2, height/2, width, height);
+
+  playerPng.resize(150, 195);
+  image(playerPng, 660, 630);
+
+  rect(width/2, height/2 - 100, width - 100, 350);
+  fill(255);
+  textSize(30);
+  text(introScript, width/2, height/2 - 100);
+
+  noStroke();
+  startButton.resize(300,150);
+  startButtonClicked.resize(300,150);
+  if (mouseX > width/2 - 150 && mouseX < width/2 + 150 && mouseY > 650 && mouseY < 800) {
+    image(startButtonClicked, width/2 - 150, 650);
+    fill(255);
+  } else {
+    image(startButton, width/2 - 150, 650);
+    fill(0);
+  }
+  textSize(28);
+  text("그럼,\n출근해볼까요?", width/2, 650+70);
+  fill(255);
+  text("press SPACEBAR or click button",width/2,860);
 }
 
 function bartender() {
@@ -300,7 +355,7 @@ function lobby() {
     if (keyIsDown(SHIFT)){
       stage = 1;
       playingNPC = NPCs[selectableNPC];
-      console.log("selectabel num: " , selectableNPC);
+      console.log("selectable num: " , selectableNPC);
     }
   }
 }
@@ -395,10 +450,20 @@ function missionFinished() {
 }
 
 function ending() {
-  image(cabin, 0, -300);
-  fill(255);
-  textSize(100);
-  text("임시 엔딩", 512, 300);
+  image(endingPlayer,0,0);
+  image(endingFrame,0,0);
+
+  startButton.resize(200,100);
+  startButtonClicked.resize(200,100);
+  if (mouseX > width/2 - 100 && mouseX < width/2 + 100 && mouseY > 800 && mouseY < 900) {
+    image(startButtonClicked, width/2 - 100, 800);
+    fill(255);
+  } else {
+    image(startButton, width/2 - 100, 800);
+    fill(0);
+  }
+  textSize(28);
+  text("처음으로", width/2, 848);
 }
 
 //--------------- 함수 내부에서 추가적으로 사용되는 함수들 -----------------//
@@ -409,10 +474,17 @@ function drawNPCs() {
     if (selectableNPC == i) img = NPC_choose[i];
     else img = NPC_pngs[i];
     img.resize(NPC_w, NPC_h);
+
+    bubbleArr[i].resize(100, 85);
+
     if (NPC_completed[i] == 1) {
       let heartPng = heart;
       heartPng.resize(50, 50);
       image(heartPng, NPC_position[i][0]+25, NPC_position[i][1] - 50)
+            
+      if (dist(plX, plY, NPC_position[i][0], NPC_position[i][1]) < 100) {
+        image(bubbleArr[i], NPC_position[i][0]+50, NPC_position[i][1]-20);
+       }
     }
     image(img, NPC_position[i][0], NPC_position[i][1]);
   }
@@ -582,10 +654,10 @@ function mouseClicked() {
           games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
           playingNPC.scriptPointer = 0;
         }
-        if (success_count == 4) { //전부 성공 시 엔딩 페이지로
+        if (success_count == 2) { //전부 성공 시 엔딩 페이지로
           stage = 5;
-        } else {
-          stage = 0;
+        } else if (success_count == 4) {
+          stage = 6;
         }
       } else { //스크립트 진행
         playingNPC.updateScriptPointer();
@@ -620,11 +692,17 @@ function mouseClicked() {
     }
   }
 
-  if (stage == -2) {
+  if (stage == -3) {
     if (mouseX > 380 && mouseX < 630 && mouseY > 450 && mouseY < 570) {
-      stage = -1;
+        stage = -2;
+      }
     }
-  }
+
+  if (stage == -2) {
+    if (mouseX > width/2 - 150 && mouseX < width/2 + 150 && mouseY > 650 && mouseY < 800) {
+        stage = -1;
+      }
+    }
 
   if (stage == 5 && completePointer != -1) {
     if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
@@ -639,6 +717,11 @@ function mouseClicked() {
     if (mouseX > 150 && mouseX < 300 && mouseY > 900 && mouseY < 975) {
       window.location.reload();
     }
+  }
+
+  if (stage == 6){
+    if (mouseX > width/2 - 100 && mouseX < width/2 + 100 && mouseY > 800 && mouseY < 900)
+      window.location.reload();
   }
 }
 
@@ -664,7 +747,70 @@ function keyPressed() {
   } else if (keyCode === RIGHT_ARROW) {
     isRightKeyPressed = true;
   }
-}
+
+  //스페이스바로 스테이지 이동
+  if(keyCode === 32){
+  //무조건 오른쪽 버튼만 누른다고 가정했을 때. 왼쪽/오른쪽 버튼 선택 가능한 경우에는 여러 추가 작업이 필요해보여 일단 보류...!
+    if (stage == 1 || stage == 3 || stage == 4){
+      if (playingNPC.scriptPointer < scripts[playingNPC.num][playingNPC.mode].length-1){
+      playingNPC.scriptPointer++;
+      } else if (playingNPC.isPlayable()) { //게임 시작하는 경우
+        playingGame = games[playingNPC.num];
+        console.log("playing NPC num here: ", playingNPC.num);
+        console.log(playingGame);
+        songLobby.stop();
+        stage = 2;
+      } else if (playingNPC.isReturnable()) { //게임 후 로비로 들어가는 경우
+        if (playingNPC.mode == 1) { //성공했을 경우
+          NPC_completed[playingNPC.num] = 1;
+          success_count++;
+        } else {
+          NPCs[playingNPC.num].mode = 0;
+          games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
+          playingNPC.scriptPointer = 0;
+        }
+        if (success_count == 2) { //전부 성공 시 엔딩 페이지로
+          stage = 5;
+        } else if (success_count == 4) {
+          stage = 6;
+        } else {
+          stage = 0;
+        }
+      }
+    }
+
+    if (stage == 2){
+      //playingGame.startButtonClicked(); // 시작할 때도 버튼이 눌려야 하는디.. 안됨
+      if (playingGame.returnResult() == 1) { //성공의 경우
+        playingNPC.mode = 1;
+        playingNPC.scriptPointer = 0;
+        stage = 3;
+        songLobby.play();
+      } else if (playingGame.returnResult() == -1){ //실패의 경우
+        playingNPC.mode = 2;
+        playingNPC.scriptPointer = 0;
+        stage = 4;
+        songLobby.play();
+      }
+    }
+
+    if(stage == -3 || stage == -2) stage++;
+
+    if (missionPointer != -1 && missionPointer < bartenderScript.length){
+      missionPointer++;
+    }
+    if (missionPointer == bartenderScript.length - 1) {
+    stage = 0;
+      }
+
+    if (stage == 5 && completePointer != -1) {
+      if (completePointer == missionCompleteScript.length - 1) {
+          stage = 6; //엔딩 화면
+        }
+        completePointer++;
+      }
+    }
+  }
 
 function keyReleased() {
   //게임
