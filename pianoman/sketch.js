@@ -6,7 +6,7 @@ let key_up, key_down, key_left, key_right;
 let pixelFont;
 
 ///스테이지 구분
-let stage = -2; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
+let stage = 0; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
 
 ///NPC 관련 변수
 let NPC_count = 4; //TODO: 향후 수정 필요
@@ -474,38 +474,31 @@ function movePlayer() {
   
   //미니테이블
   image(minitable,180,290);
-  if (
+   /*if (
     plX < 180 + minitable.width/2 && plX > 180 - 20 &&
     plY < 290 - 20 + minitable.height - NPC_h && plY > 290 - NPC_h/2
     ) {
       isRightKeyPressed = false; // 부딪히면 방향키 비활성화
-      isDownKeyPressed = false;
-      isUpKeyPressed = false;
-    } else if (
+    }*/
+    if (
     plX < 180 + minitable.width - NPC_w && plX >= 180 + minitable.width/2 &&
     plY < 290 + minitable.height - NPC_h - 20 && plY > 290 - NPC_h/2
     ) {
       isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
-      isDownKeyPressed = false;
-      isUpKeyPressed = false;
     }
 
   //큰테이블
   image(table,410,365);
   if (
     plX < 410 + table.width/2 && plX > 410 - NPC_w/2 &&
-    plY < 365 + table.height - NPC_h + 10 && plY > 365 - 100
+    plY < 365 + table.height - NPC_h -20 && plY > 365 - 100
     ) {
-      isRightKeyPressed = false; // 부딪히면 방향키 비활성화
-      isUpKeyPressed = false;
-      isDownKeyPressed = false;
+      //isRightKeyPressed = false; // 부딪히면 방향키 비활성화
     } else if (
     plX < 410 + 20 + table.width - NPC_w/2 && plX >= 410 + table.width/2 &&
-    plY < 365 + table.height - NPC_h + 10 && plY > 365 - 100
+    plY < 365 + table.height - NPC_h -20 && plY > 365 - 70
     ) {
       isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
-      isUpKeyPressed = false;
-      isDownKeyPressed = false;
     }
 
   //피아노
@@ -516,16 +509,12 @@ function movePlayer() {
     plY < 475 + pianobottom.height - NPC_h + 10 && plY > 475 - NPC_h/2
     ) {
       isRightKeyPressed = false; // 부딪히면 방향키 비활성화
-      isUpKeyPressed = false;
-      isDownKeyPressed = false;
 
     } else if (
     plX < 320 + 10 + pianobottom.width - NPC_w/2 && plX >= 320 + pianobottom.width/2 &&
     plY < 475 + pianobottom.height - NPC_h + 10 && plY > 475 - NPC_h/2
     ) {
       isLeftKeyPressed = false; // 부딪히면 방향키 비활성화
-      isUpKeyPressed = false;
-      isDownKeyPressed = false;
     }
 
   //빅식물
