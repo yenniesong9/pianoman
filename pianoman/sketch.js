@@ -6,7 +6,7 @@ let key_up, key_down, key_left, key_right;
 let pixelFont;
 
 ///스테이지 구분
-let stage = 0; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
+let stage = -2; //0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패
 
 ///NPC 관련 변수
 let NPC_count = 4; //TODO: 향후 수정 필요
