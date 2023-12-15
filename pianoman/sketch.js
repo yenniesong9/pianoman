@@ -32,7 +32,7 @@ let button = 0;
 
 //player
 let plX = 525;
-let plY = 300;//860;
+let plY = 860;
 let plSpeed = 3;
 let playerPng;
 
