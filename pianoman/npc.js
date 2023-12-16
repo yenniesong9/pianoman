@@ -27,20 +27,25 @@ let script3 = [["오늘이 크리스마스 밤이었다니!","매일 같은 시�
 let scripts = [script0, script1, script2, script3];
 
 class NPC {
-    constructor(num, imageBasic, imageSuccess) {
+    constructor(num, imageBasic, imageBasic2, imageSuccess) {
         this.num = num;
         this.imageScript = imageScript;
         this.imageBasic = imageBasic;
+        this.imageBasic2 = imageBasic2;
         this.imageSuccess = imageSuccess;
         this.scriptPointer = 0; //script의 어느 단계에 있는지
         this.mode = 0; //전, 성공, 실패
     }
 
     display() {
-        if (this.mode == 0) {
-            //게임 전 스크립트 진행
+        if (this.mode == 0) { //게임 전 스크립트 진행
             this.imageBasic.resize(700,875);
-            image(this.imageBasic,width-860,height-940); //npc 그림
+            this.imageBasic2.resize(700,875);
+            if(this.scriptPointer % 3 == 0) {
+                image(this.imageBasic,width-860,height-940); //npc 그림1
+            } else {
+                image(this.imageBasic2,width-860,height-940); //npc 그림2
+            }
             image(this.imageScript,0,0); //스크립트 디스플레이 화면
             //스크립트 텍스트
             fill(50);
