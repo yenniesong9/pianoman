@@ -6,7 +6,7 @@ let key_up, key_down, key_left, key_right;
 let pixelFont;
 
 ///스테이지 구분
-let stage = 6;
+let stage = 3;
 // -3: 시작화면, -2: 게임소개멘트, -1: 바텐더화면
 // 0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패, 
 // 5: 2명성공, 6: 4명 성공, 7: 엔딩화면
