@@ -253,13 +253,14 @@ function intro() {
   fill(0, 150);
   rect(width/2, height/2, width, height);
 
-  playerPng.resize(150, 195);
-  image(playerPng, 660, 630);
-
   rect(width/2, height/2 - 100, width - 100, 350);
   fill(255);
   textSize(30);
   text(introScript, width/2, height/2 - 100);
+
+
+  playerPng.resize(100, 130);
+  image(playerPng, 850, 450);
 
   noStroke();
   startButton.resize(300,150);
@@ -274,7 +275,7 @@ function intro() {
   textSize(28);
   text("그럼,\n출근해볼까요?", width/2, 650+70);
   fill(255);
-  text("press SPACEBAR or click button",width/2,860);
+  text("press SPACEBAR or click button",width/2,830);
 }
 
 function bartender() {
