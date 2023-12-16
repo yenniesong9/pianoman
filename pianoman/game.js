@@ -9,19 +9,16 @@ let notes0 = [[0,0],[0,0.5],[2,1],[1,2],[3,3],[2,4],[0,5.5],[0,6],
 [3,39],[3,39.5],[2,40],[0,41],[1,41.5],[0,42.5]]
 //생일 축하 노래
 
-let notes1 = [[0,0], [3,1.4], [2,2.8], [1,3.15], [1,3.85], [0,4.2], 
-[1,6.3], [2,6.65], [3,7], [2,7.35], [1,7.7], [2,8.05], 
-[3,8.75], [3,9.45], [0,9.8], [0,11.2], [3,12.6], [2,14], 
-[1,14.35], [0,15.05], [0,17.5], [1,17.95], [2,18.2], 
-[1,18.55], [0,18.9], [2,19.15], [3,19.95], [3,20.45], 
-[0,21.35], [1,21.7], [2,22.05], [3,22.75], [1,23.25], 
-[2,24.5], [3,24.7], [0,25.12], [3,25.9], [1,25.9], 
-[2,29], [3,29.47], [0,29.92], [1,30.35], [2,30.85], 
-[3,30.8], [0,34.08], [3,34], [1,34.4], [2,34.4], 
-[1,34.7], [2,35], [3,35.7], [0,36.4], [3,37.8], 
-[2,39.2], [1,39.9], [1,40.95], [0,41.3], [0,44.1], 
-[0,44.45], [2,44.8], [3,45.15], [2,45.5], [1,45.85], 
-[1,46.55]];
+let notes1 = [[0,0], [3,1.4], [2,2.8], [1,3.15], [1,3.85], [0,4.2],
+[1,6.3], [2,6.65], [3,7], [2,7.35], [1,7.7], [2,8.05], [3,8.75], [3,9.45], [0,9.8],
+[0,11.2], [3,12.6], [2,14], [1,14.35], [0,15.05],
+[0,17.5], [1,17.95], [2,18.2], [1,18.55], [0,18.9], [2,19.15], [3,19.95], [3,20.45], 
+[0,21.35], [1,21.7], [2,22.05],[3,22.75], [1,23.45],
+[0,24.15], [1,24.5], [2,24.85], [3,25.55], [1,26.25],
+[2,28], [3,28.462], [0,28.924], [1,29.4], [2,30.1],[3,30.8],
+[0,33.6], [3,33.6], [1,34.65], [2,34.65],[1,35], [2,35.35], [3,35.7], 
+[0,36.4], [3,37.8],[2,39.2], [1,39.9], [1,40.95], [0,41.3],
+[0,44.1],[0,44.45], [2,44.8], [3,45.15], [2,45.5], [1,45.85], [1,46.55]];
 //npc2 - something never change
 
 let notes2 = [[3,0],[1,0.7],[2,1.05],[3,1.4],[1,2.1],[2,2.45],[3,2.8],
@@ -48,11 +45,11 @@ let notes3 = [[3,0],[3,0.75],[1,1],[2,2],[2,2.75],[0,3],[0,4],[3,3.75],[2,5],[1,
 [2,44],[3,44.75],[2,45],[0,46],
 [0,48],[1,48.75],[2,49.25],[0,50],[2,50],[3,50.75],[2,51.25],
 [0,52],[1,52.75],[2,53],[0,53.75],[3,53.75],
-[0,56.75],[3,56.75],[1,57.75],[2,57.75],[0,58],[1,59],[2,59.75],[3,59.75],[0,60],[3,60]
-]; //npc4 -jinglebell
+[0,56.75],[3,56.75],[1,57.75],[2,57.75],[0,58],[1,59],[2,59.75],[3,59.75]]; 
+//npc4 -jinglebell
 
 let noteArr = [notes0, notes1, notes2, notes3];
-let songNameArr = ["Happy Birthday", "Something Never Change", "Memories", "Jingle Bell"]
+let songNameArr = ["Happy Birthday", "Some things Never Change", "Memories", "Jingle Bell Rock"]
 let levelArr = ["★", "★★", "★★★", "★★★★"]
 
 let laneText = ["D", "F", "J", "K"];
@@ -90,6 +87,7 @@ class Game {
 
         this.lastHitTime = 0;
         this.lastMissTime = 0;
+        this.combo = 0;
     }
 
     start() { //외부에서 플레이 버튼을 눌렀을 때 실행. 게임 시작
@@ -139,6 +137,7 @@ class Game {
             if (oldestNote.y - oldestNote.height/2 > laneDetected) {
                 this.displayedNotes.shift(); //가장 오래된 노트 삭제
                 this.miss++; //miss 횟수 증가
+                this.combo = 0;
                 this.lastMissTime = textDisplayedTime;
             }
         }
@@ -155,9 +154,10 @@ class Game {
 
                     //디스플레이
                     //console.log(this.displayedNotes);
+                    let curTime = millis();
                     for (let note of this.displayedNotes) {
                         note.display();
-                        note.y = (millis()-this.startTime-note.timing*this.bpm)/3000*965 - 50;
+                        note.y = (curTime-this.startTime-note.timing*this.bpm)/3000*965 - 50;
                     }
 
                     this.song.onended(() => {
@@ -227,6 +227,7 @@ class Game {
                         //this.displayedNotes.splice(i, 1); //노트 삭제
                         deletedNoteIdx.push(i);
                         this.hit++; //hit 횟수 증가
+                        this.combo++;
                         this.lastHitTime = textDisplayedTime;
                         break; //이 노트를 더 이상 확인할 필요 없음
                     }
@@ -281,14 +282,19 @@ class Game {
     hitAndMiss() {
         textSize(100)
         if (this.lastHitTime > this.lastMissTime) {
-            fill(255, this.lastHitTime*10);
-            text("Hit!", width/2, 350);
+            if (this.combo > 2) {
+                fill(255, 255, 0, this.lastHitTime*10);
+                text("COMBO " + this.combo + "!", width/2, 600);
+            } else {
+                fill(255, this.lastHitTime*10);
+                text("HIT!", width/2, 600);
+            }
             this.lastHitTime--;
             this.lastMissTime = (this.lastMissTime != 0) ? this.lastMissTime - 1 : 0;
         } else {
             if (this.lastMissTime > 0) {
                 fill(255, 0, 0, this.lastMissTime*10);
-                text("Miss!", width/2, 350);
+                text("MISS!", width/2, 600);
                 this.lastMissTime--;
                 this.lastHitTime = (this.lastHitTime != 0) ? this.lastHitTime - 1 : 0;
             }

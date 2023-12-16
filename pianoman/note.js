@@ -1,6 +1,6 @@
 let laneStartX = [200, 400, 600, 800];
 let laneStartY = 850;
-let laneDetected = 875;
+let laneDetected = 880;
 let laneColor = ['pink', 'red', 'salmon', 'orange'];
 
 
@@ -27,7 +27,7 @@ class Note {
         //이미지는 코너를 중심으로 불러와짐
         
         //위치 업데이트
-        this.y += this.speed;
+        //this.y += this.speed;
         //노트가 화면 밖으로 나가거나 유저가 버튼을 눌러서 삭제되는 경우는 게임 클래스에서 처리
     }
 

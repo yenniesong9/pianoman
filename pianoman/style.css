@@ -3,15 +3,47 @@ html, body {
   padding: 0;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 canvas {
   display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
 
 body {
   margin: 0;
   display: flex;
-
-  /*캔버스를 화면 중앙에 표시*/
   justify-content: center;
+  align-items: center;
   background-color: black;
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+img {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  z-index: 0; /* GIF를 캔버스 아래 표시 */
+}
+
+/* 왼쪽에 나타나는 GIF 위치 조정 */
+.left-gif {
+  left: 0;
+  transform: none; /* 위치 조정 */
+}
+
+/* 오른쪽에 나타나는 GIF 위치 조정 */
+.right-gif {
+  right: 0;
+  transform: none; /* 위치 조정 */
 }
