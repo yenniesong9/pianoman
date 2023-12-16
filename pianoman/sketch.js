@@ -6,9 +6,10 @@ let key_up, key_down, key_left, key_right;
 let pixelFont;
 
 ///스테이지 구분
-let stage = -3;
+let stage = 6;
 // -3: 시작화면, -2: 게임소개멘트, -1: 바텐더화면
-// 0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패, 5: 2명성공, 6: 4명 성공
+// 0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패, 
+// 5: 2명성공, 6: 4명 성공, 7: 엔딩화면
 
 ///NPC 관련 변수
 let NPC_count = 4; //TODO: 향후 수정 필요
@@ -73,6 +74,12 @@ let missionCompleteScript = ["오늘 첫 출근이라 걱정이 많았는데,",
 "하지만 남아서 피아노를 더 연주하고 싶다면 \n얼마든지 그래도 돼. 우리 바는 항상 열려있거든!"];
 //2명 엔딩 스크립트입니다
 let completePointer = -1;
+
+//4명 엔딩 스크립트도 필요함
+let allCompleteScript = ["피아노 연주로 손님을 모두 행복하게 하다니!","넌 정말 최고의 피아니스트야. 아주 잘 뽑았군.",
+"덕분에 나와 여기 계신 손님들 모두\n좋은 크리스마스 추억을 만들 수 있었어.", 
+"그럼 당신도 행복한 크리스마스를 보내라고~!"]
+let allCompletePointer = 0;
 
 
 function preload() {
@@ -198,9 +205,11 @@ function draw() {
     success();
   } else if (stage == 4){ //실패 스크립트 진행
     fail();
-  } else if (stage == 5){ //전체 성공
+  } else if (stage == 5){ //2명 성공
     missionFinished();
-  } else if (stage == 6) {
+  } else if (stage == 6) { //4명 성공
+    allComplete();
+  } else if (stage == 7) { //엔딩
     ending();
   }
 
@@ -440,8 +449,11 @@ function missionFinished() {
     textSize(30);
     text(missionCompleteScript[completePointer], width/2, 750);
     let button1 = new Button(880-75, 920-37.5);
+    let button2 = new Button(880-75-170, 920-37.5);
     if (completePointer == missionCompleteScript.length - 1) {
       button1.setTitle("엔딩으로");
+      button2.setTitle("다른 손님에게\n연주하기");
+      button2.show();
     } else {
       button1.setTitle("다음으로");
     }
@@ -466,6 +478,29 @@ function ending() {
   text("처음으로", width/2, 848);
 }
 
+function allComplete() {
+  image(bg_main,0,0);
+  //npc 그리기
+  drawNPCs();
+
+  if (allCompletePointer != -1) {
+    noStroke();
+    fill(0, 150);
+    rect(width/2, height/2, width, height);
+    rect(width/2, 750, width - 100, 200);
+    image(bartenderPng2, 350, 100);
+    fill(255);
+    textSize(30);
+    text(allCompleteScript[allCompletePointer], width/2, 750);
+    let button1 = new Button(880-75, 920-37.5);
+    if (allCompletePointer == allCompleteScript.length - 1) {
+      button1.setTitle("엔딩으로");
+    } else {
+      button1.setTitle("다음으로");
+    }
+    button1.show();
+  }
+}
 //--------------- 함수 내부에서 추가적으로 사용되는 함수들 -----------------//
 
 function drawNPCs() {
@@ -705,11 +740,23 @@ function mouseClicked() {
     }
 
   if (stage == 5 && completePointer != -1) {
+    if (completePointer == missionCompleteScript.length - 1) {
+      if (mouseX > 635 && mouseX < 785 && mouseY > 882 && mouseY < 957){
+        stage = 0;
+        }
     if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
-      if (completePointer == missionCompleteScript.length - 1) {
         stage = 6; //엔딩 화면
       }
-      completePointer++;
+    } completePointer++;
+  }
+
+
+  if (stage == 6 && allCompletePointer != -1) {
+    if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
+      if (allCompletePointer == allCompleteScript.length - 1) {
+        stage = 7;
+      }
+      allCompletePointer++;
     }
   }
 
@@ -719,7 +766,7 @@ function mouseClicked() {
     }
   }
 
-  if (stage == 6){
+  if (stage == 7){
     if (mouseX > width/2 - 100 && mouseX < width/2 + 100 && mouseY > 800 && mouseY < 900)
       window.location.reload();
   }
@@ -780,7 +827,7 @@ function keyPressed() {
     }
 
     if (stage == 2){
-      //playingGame.startButtonClicked(); // 시작할 때도 버튼이 눌려야 하는디.. 안됨
+      //playingGame.startButtonClicked(); // 시작할 때도 버튼이 눌려야 하는디.. 왜 안될까
       if (playingGame.returnResult() == 1) { //성공의 경우
         playingNPC.mode = 1;
         playingNPC.scriptPointer = 0;
@@ -809,6 +856,16 @@ function keyPressed() {
         }
         completePointer++;
       }
+      
+      if (stage == 6 && allCompletePointer != -1) {
+          if (allCompletePointer == allCompleteScript.length - 1) {
+            stage = 7;
+          } else allCompletePointer++;
+        }
+
+      /*if (stage == 7){
+          window.location.reload(); // 왜 안될까 22
+      }*/
     }
   }
 
