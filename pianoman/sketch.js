@@ -206,11 +206,47 @@ function beforeStart() {
   if (mouseX > 380 && mouseX < 630 && mouseY > 450 && mouseY < 570) {
     image(startButton, 380, 450);
     fill(0);
-  } else {
-    image(startButtonClicked, 380, 450);
-    fill(255);
+
   }
+  noStroke();
   text("START", 512, 500);
+
+  //fill(0,200);
+  //rect(width/2,640,350,80);
+  stroke(0);
+  strokeWeight(3);
+  fill(255);
+  textSize(36);
+  text("press SPACEBAR or\nclick button to start",512,635);
+}
+
+function intro() {
+  tree.resize(1029*1.5, 772*1.5);
+  image(tree, 0, 0);
+
+  fill(0, 150);
+  rect(width/2, height/2, width, height);
+
+  rect(width/2, height/2 - 100, width - 100, 350);
+  fill(255);
+  textSize(30);
+  text(introScript, width/2, height/2 - 100);
+
+
+  playerPng.resize(100, 130);
+  image(playerPng, 850, 450);
+
+  noStroke();
+  startButton.resize(300,150);
+  startButtonClicked.resize(300,150);
+  if (mouseX > width/2 - 150 && mouseX < width/2 + 150 && mouseY > 650 && mouseY < 800) {
+    image(startButtonClicked, width/2 - 150, 650);
+    fill(255);
+
+  textSize(28);
+  text("그럼,\n출근해볼까요?", width/2, 650+70);
+  fill(255);
+  text("press SPACEBAR or click button",width/2,830);
 }
 
 function bartender() {
