@@ -148,7 +148,7 @@ function preload() {
   bartenderPng2 = loadImage('images/NPC/바텐더 3인칭(기본).png')
   endingPlayer = loadImage('images/NPC/엔딩배경.png')
   endingFrame = loadImage('images/NPC/엔딩프레임.png')
-  cabin = loadImage('images/background/cabin.jpeg')
+  cabin = loadImage('images/background/opening.png')
   tree = loadImage('images/background/tree.jpeg')
   startButton = loadImage('images/button/대화창버튼기본.png');
   startButtonClicked = loadImage('images/button/대화창버튼눌림.png');
@@ -223,30 +223,12 @@ function draw() {
 
 //--------------- 각 스테이지 별 함수들 -----------------//
 function beforeStart() {
-  image(cabin, 0, -300);
-  fill(255);
-  textSize(100);
-  text("Piano Man", 512, 300);
-  startButton.resize(250, 120);
-  startButtonClicked.resize(250, 120);
-  textSize(50);
-  if (mouseX > 380 && mouseX < 630 && mouseY > 450 && mouseY < 570) {
-    image(startButtonClicked, 380, 450);
-    fill(255);
-  } else {
-    image(startButton, 380, 450);
-    fill(0);
-  }
-  noStroke();
-  text("START", 512, 500);
-
-  //fill(0,200);
-  //rect(width/2,640,350,80);
+  image(cabin, 0, 0);
   stroke(0);
   strokeWeight(3);
   fill(255);
   textSize(36);
-  text("press SPACEBAR or\nclick button to start",512,635);
+  text("press SPACEBAR or\nclick button to start",512,700);
 }
 
 function intro() {
@@ -737,7 +719,7 @@ function mouseClicked() {
   }
 
   if (stage == -3) {
-    if (mouseX > 380 && mouseX < 630 && mouseY > 450 && mouseY < 570) {
+    if (mouseX > 390 && mouseX < 640 && mouseY > 550 && mouseY < 630) {
         stage = -2;
         songLobby.play();
       }
