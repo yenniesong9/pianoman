@@ -306,11 +306,11 @@ function bartender() {
     noStroke();
     fill(0, 150);
     rect(width/2, height/2, width, height);
-    rect(width/2, 750, width - 100, 200);
-    image(bartenderBasic, 300, 100);
-    fill(255);
+    image(bartenderBasic, 300, 150);
+    image(imageScript, 0, 0);
+    fill(0);
     textSize(30);
-    text(bartenderScript[missionPointer], width/2, 750);
+    text(bartenderScript[missionPointer], width/2, 800);
     let button1 = new Button(880-75, 920-37.5);
     button1.setTitle("다음으로");
     button1.show();
@@ -432,11 +432,12 @@ function missionFinished() {
     noStroke();
     fill(0, 150);
     rect(width/2, height/2, width, height);
-    rect(width/2, 750, width - 100, 200);
-    image(bartenderSmile, 350, 100);
-    fill(255);
+    //rect(width/2, 750, width - 100, 200);
+    image(bartenderSmile, 350, 150);
+    image(imageScript, 0, 0);
+    fill(0);
     textSize(30);
-    text(missionCompleteScript[completePointer], width/2, 750);
+    text(missionCompleteScript[completePointer], width/2, 800);
     let button1 = new Button(880-75, 920-37.5);
     let button2 = new Button(880-75-170, 920-37.5);
     if (completePointer == missionCompleteScript.length - 1) {
@@ -476,11 +477,12 @@ function allComplete() {
     noStroke();
     fill(0, 150);
     rect(width/2, height/2, width, height);
-    rect(width/2, 750, width - 100, 200);
-    image(bartenderSmile, 350, 100);
-    fill(255);
+    //rect(width/2, 750, width - 100, 200);
+    image(bartenderSmile, 350, 150);
+    image(imageScript, 0, 0);
+    fill(0);
     textSize(30);
-    text(allCompleteScript[allCompletePointer], width/2, 750);
+    text(allCompleteScript[allCompletePointer], width/2, 800);
     let button1 = new Button(880-75, 920-37.5);
     if (allCompletePointer == allCompleteScript.length - 1) {
       button1.setTitle("엔딩으로");
