@@ -184,7 +184,6 @@ function setup() {
 
   songLobby.setLoop(true);
   songLobby.setVolume(0.3);
-  songLobby.play();
 }
 
 function draw() {
@@ -740,6 +739,7 @@ function mouseClicked() {
   if (stage == -3) {
     if (mouseX > 380 && mouseX < 630 && mouseY > 450 && mouseY < 570) {
         stage = -2;
+        songLobby.play();
       }
     }
 
@@ -856,7 +856,12 @@ function keyPressed() {
       }
     }
 
-    if(stage == -3 || stage == -2) stage++;
+    if(stage == -3 || stage == -2) {
+      if (stage == -3) {
+        songLobby.play();
+      }
+      stage++;
+    }
 
     if (missionPointer != -1 && missionPointer < bartenderScript.length){
       missionPointer++;
