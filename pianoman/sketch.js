@@ -188,7 +188,11 @@ function setup() {
 }
 
 function draw() {
-  //console.log(playingNPC);
+  //console.log("playingNPC: ", playingNPC);
+  //console.log("selectableNPC: ", selectableNPC);
+  //console.log(NPC_completed);
+  //console.log(stage);
+  //console.log(success_count);
   if (stage == -3) {
     beforeStart();
   } else if (stage == -2) {
@@ -365,7 +369,6 @@ function lobby() {
     if (keyIsDown(SHIFT)){
       stage = 1;
       playingNPC = NPCs[selectableNPC];
-      console.log("selectable num: " , selectableNPC);
     }
   }
 }
@@ -658,6 +661,7 @@ function drawResetButton() {
 //--------------- 외부 입력과 관련된 함수들 -----------------//
 
 function mouseClicked() {
+  console.log(stage);
   console.log(mouseX, mouseY); //좌표 확인 용
 
   if (stage == 1 || stage == 3 || stage == 4) { //스크립트 플레이
@@ -684,6 +688,9 @@ function mouseClicked() {
       } else if (playingNPC.isReturnable()) { //게임 후 로비로 들어가는 경우
         if (playingNPC.mode == 1) { //성공했을 경우
           NPC_completed[playingNPC.num] = 1;
+
+          console.log("here1");
+
           success_count++;
         } else {
           NPCs[playingNPC.num].mode = 0;
@@ -694,6 +701,8 @@ function mouseClicked() {
           stage = 5;
         } else if (success_count == 4) {
           stage = 6;
+        } else {
+          stage = 0;
         }
       } else { //스크립트 진행
         playingNPC.updateScriptPointer();
@@ -788,6 +797,7 @@ function keyPressed() {
   //이동
   if (keyCode === UP_ARROW) {
     isUpKeyPressed = true;
+    console.log(stage);
   } else if (keyCode === DOWN_ARROW) {
     isDownKeyPressed = true;
   } else if (keyCode === LEFT_ARROW) {
@@ -811,6 +821,10 @@ function keyPressed() {
       } else if (playingNPC.isReturnable()) { //게임 후 로비로 들어가는 경우
         if (playingNPC.mode == 1) { //성공했을 경우
           NPC_completed[playingNPC.num] = 1;
+
+          console.log("here2");
+
+
           success_count++;
         } else {
           NPCs[playingNPC.num].mode = 0;
