@@ -10,6 +10,7 @@ let stage = -3;
 // -3: 시작화면, -2: 게임소개멘트, -1: 바텐더화면
 // 0:로비, 1:NPC 플레이 중, 2:게임 중, 3:성공, 4:실패, 
 // 5: 2명성공, 6: 4명 성공, 7: 엔딩화면
+//let spacebarInput;
 
 ///NPC 관련 변수
 let NPC_count = 4; //TODO: 향후 수정 필요
@@ -452,8 +453,8 @@ function missionFinished() {
     let button1 = new Button(880-75, 920-37.5);
     let button2 = new Button(880-75-170, 920-37.5);
     if (completePointer == missionCompleteScript.length - 1) {
-      button1.setTitle("엔딩으로");
-      button2.setTitle("다른 손님에게\n연주하기");
+      button1.setTitle("다른 손님에게\n연주하기");
+      button2.setTitle("엔딩으로");
       button2.show();
     } else {
       button1.setTitle("다음으로");
@@ -743,10 +744,10 @@ function mouseClicked() {
   if (stage == 5 && completePointer != -1) {
     if (completePointer == missionCompleteScript.length - 1) {
       if (mouseX > 635 && mouseX < 785 && mouseY > 882 && mouseY < 957){
-        stage = 0;
+        stage = 6; //엔딩 화면
         }
     if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
-        stage = 6; //엔딩 화면
+        stage = 0; //로비에서 이어 하기
       }
     } completePointer++;
   }
@@ -761,7 +762,7 @@ function mouseClicked() {
     }
   }
 
-  if (stage == 0 || (stage == -1 && missionPointer < 0) || (stage == 5&&completePointer < 0)) { //재시작
+  if (stage == 0 || (stage == -1 && missionPointer < 0) || (stage == 5 && completePointer < 0)) { //재시작
     if (mouseX > 150 && mouseX < 300 && mouseY > 900 && mouseY < 975) {
       window.location.reload();
     }
@@ -828,7 +829,7 @@ function keyPressed() {
     }
 
     if (stage == 2){
-      //playingGame.startButtonClicked(); // 시작할 때도 버튼이 눌려야 하는디.. 왜 안될까
+      //playingGame.startButtonClicked(); // 플레이 전 대기화면 없이 게임이 바로 시작됨...
       if (playingGame.returnResult() == 1) { //성공의 경우
         playingNPC.mode = 1;
         playingNPC.scriptPointer = 0;
@@ -844,16 +845,14 @@ function keyPressed() {
 
     if(stage == -3 || stage == -2) stage++;
 
-    if (missionPointer != -1 && missionPointer < bartenderScript.length){
-      missionPointer++;
+    if (missionPointer != -1 && missionPointer < bartenderScript.length){    
+      if (missionPointer == bartenderScript.length - 1) {
+      stage = 0;
+      } missionPointer++;
     }
-    if (missionPointer == bartenderScript.length - 1) {
-    stage = 0;
-      }
-
     if (stage == 5 && completePointer != -1) {
       if (completePointer == missionCompleteScript.length - 1) {
-          stage = 6; //엔딩 화면
+          stage = 0; //엔딩 화면
         }
         completePointer++;
       }
@@ -864,9 +863,9 @@ function keyPressed() {
           } else allCompletePointer++;
         }
 
-      /*if (stage == 7){
-          window.location.reload(); // 왜 안될까 22
-      }*/
+      if (stage == 7){
+         window.location.reload();  // 엔딩 화면에서 멈추지 않고 바로 reload 됨...
+      }
     }
   }
 
