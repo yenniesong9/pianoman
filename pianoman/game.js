@@ -49,7 +49,7 @@ let notes3 = [[3,0],[3,0.75],[1,1],[2,2],[2,2.75],[0,3],[0,4],[3,3.75],[2,5],[1,
 //npc4 -jinglebell
 
 let noteArr = [notes0, notes1, notes2, notes3];
-let songNameArr = ["Happy Birthday", "Some things Never Change", "Memories", "Jingle Bell Rock"];
+let songNameArr = ["Happy Birthday", "Some Things Never Change", "Memories", "Jingle Bell Rock"];
 let artistArr = ["", "", "", ""];
 let levelArr = ["★", "★★", "★★★", "★★★★"];
 
