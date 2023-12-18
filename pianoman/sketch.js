@@ -211,8 +211,10 @@ function draw() {
   } else if (stage == 4){ //실패 스크립트 진행
     fail();
   } else if (stage == 5){ //2명 성공
+    selectableNPC = -1;
     missionFinished();
   } else if (stage == 6) { //4명 성공
+    selectableNPC = -1;
     allComplete();
   } else if (stage == 7) { //엔딩
     ending();
@@ -847,8 +849,9 @@ function spaceMove() {
             games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
             playingNPC.scriptPointer = 0;
           }
-          if (success_count == 2) { //전부 성공 시 엔딩 페이지로
+          if (success_count == 2) {
             stage = 5;
+            selectableNPC = -1;
           } else if (success_count == 4) {
             stage = 6;
           } else {
