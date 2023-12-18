@@ -829,11 +829,7 @@ function keyPressed() {
     }
 
     if (stage == 2){
-      //let isSpacebarPressed = playingGame.spacebarPress();
-        //console.log(playingGame.spacebarPress());playingGame.returnResult() =
-        if (playingGame.spacebarPress() == -1){
-          playingGame.startButtonClicked();
-         } // 시작할 때도 버튼이 눌려야 하는디.. 왜 안될까
+      //playingGame.startButtonClicked(); // 플레이 전 대기화면 없이 게임이 바로 시작됨...
       if (playingGame.returnResult() == 1) { //성공의 경우
         playingNPC.mode = 1;
         playingNPC.scriptPointer = 0;
@@ -868,7 +864,7 @@ function keyPressed() {
         }
 
       if (stage == 7){
-         window.location.reload(); // 왜 안될까 22
+         window.location.reload();  // 엔딩 화면에서 멈추지 않고 바로 reload 됨...
       }
     }
   }
