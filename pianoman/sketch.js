@@ -53,7 +53,8 @@ let selectableNPC = -1;
 let heart;
 let arrow;
 let bartenderPng;
-let bartenderPng2;
+let bartenderBasic;
+let bartenderSmile;
 let bartenderScript = ["어, 그래! 당신이 오늘부터 함께 일하게 된 피아노맨이군.", 
 "크리스마스인데 왜 표정이 안 좋냐고? 휴...", 
 "오늘 같이 특별한 밤에 슬퍼보이는 손님이 많아서 \n걱정이 이만저만이 아냐.",
@@ -145,7 +146,8 @@ function preload() {
   heart = loadImage('images/NPC/하트.png');
   arrow = loadImage('images/NPC/화살표.png');
   bartenderPng = loadImage('images/NPC/바텐더 3인칭(기본).png')
-  bartenderPng2 = loadImage('images/NPC/바텐더 3인칭(기본).png')
+  bartenderBasic = loadImage('images/NPC/바텐더 기본.png')
+  bartenderSmile = loadImage('images/NPC/바텐더 웃음.png')
   endingPlayer = loadImage('images/NPC/엔딩배경.png')
   endingFrame = loadImage('images/NPC/엔딩프레임.png')
   cabin = loadImage('images/background/opening.png')
@@ -303,7 +305,7 @@ function bartender() {
     fill(0, 150);
     rect(width/2, height/2, width, height);
     rect(width/2, 750, width - 100, 200);
-    image(bartenderPng2, 300, 100);
+    image(bartenderBasic, 300, 100);
     fill(255);
     textSize(30);
     text(bartenderScript[missionPointer], width/2, 750);
@@ -429,15 +431,15 @@ function missionFinished() {
     fill(0, 150);
     rect(width/2, height/2, width, height);
     rect(width/2, 750, width - 100, 200);
-    image(bartenderPng2, 350, 100);
+    image(bartenderSmile, 350, 100);
     fill(255);
     textSize(30);
     text(missionCompleteScript[completePointer], width/2, 750);
     let button1 = new Button(880-75, 920-37.5);
     let button2 = new Button(880-75-170, 920-37.5);
     if (completePointer == missionCompleteScript.length - 1) {
-      button1.setTitle("엔딩으로");
-      button2.setTitle("다른 손님에게\n연주하기");
+      button1.setTitle("다른 손님에게\n연주하기");
+      button2.setTitle("처음으로");
       button2.show();
     } else {
       button1.setTitle("다음으로");
@@ -473,7 +475,7 @@ function allComplete() {
     fill(0, 150);
     rect(width/2, height/2, width, height);
     rect(width/2, 750, width - 100, 200);
-    image(bartenderPng2, 350, 100);
+    image(bartenderSmile, 350, 100);
     fill(255);
     textSize(30);
     text(allCompleteScript[allCompletePointer], width/2, 750);
@@ -734,16 +736,17 @@ function mouseClicked() {
   if (stage == 5 && completePointer != -1) {
     if (completePointer == missionCompleteScript.length - 1) {
       if (mouseX > 635 && mouseX < 785 && mouseY > 882 && mouseY < 957){
-        stage = 0;
+        window.location.reload();
         }
     if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
-        stage = 6; //엔딩 화면
+        stage = 0;
       }
     } completePointer++;
   }
 
 
   if (stage == 6 && allCompletePointer != -1) {
+    console.log("here");
     if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
       if (allCompletePointer == allCompleteScript.length - 1) {
         stage = 7;
@@ -765,11 +768,6 @@ function mouseClicked() {
 }
 
 function keyPressed() {
-  if (keyCode == 82) {
-    stage = 7;
-  }
-
-
   //게임
   if (keyCode == 68) { //D
     playingGame.buttonPressed(0);
@@ -793,8 +791,12 @@ function keyPressed() {
     isRightKeyPressed = true;
   }
 
-  
+
+  //스페이스바로 스테이지 이동
+  if(keyCode === 32){
+    spaceMove();
   }
+}
 
 function keyReleased() {
   //게임
@@ -818,11 +820,10 @@ function keyReleased() {
   } else if (keyCode === RIGHT_ARROW) {
     isRightKeyPressed = false;
   }
+}
 
-
-  //스페이스바로 스테이지 이동
-  if(keyCode === 32){
-    console.log("here...");
+function spaceMove() {
+  console.log(stage);
     //무조건 오른쪽 버튼만 누른다고 가정했을 때. 왼쪽/오른쪽 버튼 선택 가능한 경우에는 여러 추가 작업이 필요해보여 일단 보류...!
       if (stage == 1 || stage == 3 || stage == 4){
         if (playingNPC.scriptPointer < scripts[playingNPC.num][playingNPC.mode].length-1){
@@ -867,37 +868,28 @@ function keyReleased() {
           stage = 4;
           songLobby.play();
         }
-      }
-  
-      if(stage == -3 || stage == -2) {
+      } else if(stage == -3 || stage == -2) {
         if (stage == -3) {
           songLobby.play();
         }
         stage++;
-      }
-  
-      if (missionPointer != -1 && missionPointer < bartenderScript.length){
-        missionPointer++;
-      }
-      if (missionPointer == bartenderScript.length - 1) {
-      stage = 0;
+      } else if (stage == -1) {
+        console.log(missionPointer);
+        if (missionPointer != -1 && missionPointer < bartenderScript.length -1){
+          missionPointer++;
+        } else if (missionPointer == bartenderScript.length -1) {
+          stage = 0;
         }
-  
-      if (stage == 5 && completePointer != -1) {
+      } else if (stage == 5 && completePointer != -1) {
         if (completePointer == missionCompleteScript.length - 1) {
-            stage = 6; //엔딩 화면
+            stage = 0; //엔딩 화면
           }
         completePointer++;
-      }
-        
-        if (stage == 6 && allCompletePointer != -1) {
+      } else if (stage == 6 && allCompletePointer != -1) {
           if (allCompletePointer == allCompleteScript.length - 1) {
             stage = 7;
           } else allCompletePointer++;
-        }
-  
-        if (stage == 7){
-          window.location.reload(); // 왜 안될까 22
-        }
+      } else if (stage == 7){
+        window.location.reload(); // 왜 안될까 22
       }
 }
