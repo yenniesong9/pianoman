@@ -765,6 +765,11 @@ function mouseClicked() {
 }
 
 function keyPressed() {
+  if (keyCode == 82) {
+    stage = 7;
+  }
+
+
   //게임
   if (keyCode == 68) { //D
     playingGame.buttonPressed(0);
@@ -788,87 +793,7 @@ function keyPressed() {
     isRightKeyPressed = true;
   }
 
-  //스페이스바로 스테이지 이동
-  if(keyCode === 32){
-  //무조건 오른쪽 버튼만 누른다고 가정했을 때. 왼쪽/오른쪽 버튼 선택 가능한 경우에는 여러 추가 작업이 필요해보여 일단 보류...!
-    if (stage == 1 || stage == 3 || stage == 4){
-      if (playingNPC.scriptPointer < scripts[playingNPC.num][playingNPC.mode].length-1){
-      playingNPC.scriptPointer++;
-      } else if (playingNPC.isPlayable()) { //게임 시작하는 경우
-        playingGame = games[playingNPC.num];
-        console.log("playing NPC num here: ", playingNPC.num);
-        console.log(playingGame);
-        songLobby.stop();
-        stage = 2;
-      } else if (playingNPC.isReturnable()) { //게임 후 로비로 들어가는 경우
-        if (playingNPC.mode == 1) { //성공했을 경우
-          NPC_completed[playingNPC.num] = 1;
-
-          console.log("here2");
-
-
-          success_count++;
-        } else {
-          NPCs[playingNPC.num].mode = 0;
-          games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
-          playingNPC.scriptPointer = 0;
-        }
-        if (success_count == 2) { //전부 성공 시 엔딩 페이지로
-          stage = 5;
-        } else if (success_count == 4) {
-          stage = 6;
-        } else {
-          stage = 0;
-        }
-      }
-    }
-
-    if (stage == 2){
-      //playingGame.startButtonClicked(); // 시작할 때도 버튼이 눌려야 하는디.. 왜 안될까
-      if (playingGame.returnResult() == 1) { //성공의 경우
-        playingNPC.mode = 1;
-        playingNPC.scriptPointer = 0;
-        stage = 3;
-        songLobby.play();
-      } else if (playingGame.returnResult() == -1){ //실패의 경우
-        playingNPC.mode = 2;
-        playingNPC.scriptPointer = 0;
-        stage = 4;
-        songLobby.play();
-      }
-    }
-
-    if(stage == -3 || stage == -2) {
-      if (stage == -3) {
-        songLobby.play();
-      }
-      stage++;
-    }
-
-    if (missionPointer != -1 && missionPointer < bartenderScript.length){
-      missionPointer++;
-    }
-    if (missionPointer == bartenderScript.length - 1) {
-    stage = 0;
-      }
-
-    if (stage == 5 && completePointer != -1) {
-      if (completePointer == missionCompleteScript.length - 1) {
-          stage = 6; //엔딩 화면
-        }
-        completePointer++;
-      }
-      
-      if (stage == 6 && allCompletePointer != -1) {
-          if (allCompletePointer == allCompleteScript.length - 1) {
-            stage = 7;
-          } else allCompletePointer++;
-        }
-
-      /*if (stage == 7){
-          window.location.reload(); // 왜 안될까 22
-      }*/
-    }
+  
   }
 
 function keyReleased() {
@@ -893,4 +818,86 @@ function keyReleased() {
   } else if (keyCode === RIGHT_ARROW) {
     isRightKeyPressed = false;
   }
+
+
+  //스페이스바로 스테이지 이동
+  if(keyCode === 32){
+    console.log("here...");
+    //무조건 오른쪽 버튼만 누른다고 가정했을 때. 왼쪽/오른쪽 버튼 선택 가능한 경우에는 여러 추가 작업이 필요해보여 일단 보류...!
+      if (stage == 1 || stage == 3 || stage == 4){
+        if (playingNPC.scriptPointer < scripts[playingNPC.num][playingNPC.mode].length-1){
+        playingNPC.scriptPointer++;
+        } else if (playingNPC.isPlayable()) { //게임 시작하는 경우
+          playingGame = games[playingNPC.num];
+          console.log("playing NPC num here: ", playingNPC.num);
+          console.log(playingGame);
+          songLobby.stop();
+          stage = 2;
+        } else if (playingNPC.isReturnable()) { //게임 후 로비로 들어가는 경우
+          if (playingNPC.mode == 1) { //성공했을 경우
+            NPC_completed[playingNPC.num] = 1;
+  
+            console.log("here2");
+  
+  
+            success_count++;
+          } else {
+            NPCs[playingNPC.num].mode = 0;
+            games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
+            playingNPC.scriptPointer = 0;
+          }
+          if (success_count == 2) { //전부 성공 시 엔딩 페이지로
+            stage = 5;
+          } else if (success_count == 4) {
+            stage = 6;
+          } else {
+            stage = 0;
+          }
+        }
+      } else if (stage == 2){
+        playingGame.startButtonClicked(); // 시작할 때도 버튼이 눌려야 하는디.. 왜 안될까
+        if (playingGame.returnResult() == 1) { //성공의 경우
+          playingNPC.mode = 1;
+          playingNPC.scriptPointer = 0;
+          stage = 3;
+          songLobby.play();
+        } else if (playingGame.returnResult() == -1){ //실패의 경우
+          playingNPC.mode = 2;
+          playingNPC.scriptPointer = 0;
+          stage = 4;
+          songLobby.play();
+        }
+      }
+  
+      if(stage == -3 || stage == -2) {
+        if (stage == -3) {
+          songLobby.play();
+        }
+        stage++;
+      }
+  
+      if (missionPointer != -1 && missionPointer < bartenderScript.length){
+        missionPointer++;
+      }
+      if (missionPointer == bartenderScript.length - 1) {
+      stage = 0;
+        }
+  
+      if (stage == 5 && completePointer != -1) {
+        if (completePointer == missionCompleteScript.length - 1) {
+            stage = 6; //엔딩 화면
+          }
+        completePointer++;
+      }
+        
+        if (stage == 6 && allCompletePointer != -1) {
+          if (allCompletePointer == allCompleteScript.length - 1) {
+            stage = 7;
+          } else allCompletePointer++;
+        }
+  
+        if (stage == 7){
+          window.location.reload(); // 왜 안될까 22
+        }
+      }
 }
