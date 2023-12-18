@@ -125,7 +125,6 @@ function preload() {
   bubbleArr[3] = loadImage('images/button/말풍선_wow.png');
 
   for (let i = 0; i < NPC_count; i++) {
-    console.log(i);
     let title = 'images/NPC/손님' + (i+1) + ' 3인칭(기본).png'
     let pixel = loadImage(title);
     NPC_pngs[i] = pixel;
@@ -137,7 +136,6 @@ function preload() {
     let success = loadImage('images/NPC/손님' + (i+1) + '성공(픽셀화).png');
     let npc = new NPC(i, basic, basic2, success);
     NPCs[i] = npc;
-    console.log(NPCs[i]);
     let notePng = loadImage('images/button/선물버튼' + (i+1) + '.png');
     notePngArr[i] = notePng;
   }
@@ -189,11 +187,6 @@ function setup() {
 }
 
 function draw() {
-  //console.log("playingNPC: ", playingNPC);
-  //console.log("selectableNPC: ", selectableNPC);
-  //console.log(NPC_completed);
-  //console.log(stage);
-  //console.log(success_count);
   if (stage == -3) {
     beforeStart();
   } else if (stage == -2) {
@@ -648,17 +641,12 @@ function drawResetButton() {
 //--------------- 외부 입력과 관련된 함수들 -----------------//
 
 function mouseClicked() {
-  console.log(stage);
-  console.log(mouseX, mouseY); //좌표 확인 용
-
   if (stage == 1 || stage == 3 || stage == 4) { //스크립트 플레이
     if (mouseX > 635 && mouseX < 785 && mouseY > 882 && mouseY < 957){
       if (playingNPC.isPlayable()) { //게임 하기 전에 로비로 돌아가는 경우
-        console.log("return to lobby");
         playingNPC.scriptPointer = 0;
         stage = 0;
       } else { //실패 상태에서 게임 다시 플레이
-        console.log("test");
         playingNPC.scriptPointer = 0;
         games[playingNPC.num] = new Game(playingNPC.num, songArr[playingNPC.num]);
         playingGame = games[playingNPC.num];
@@ -668,16 +656,11 @@ function mouseClicked() {
     } else if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
       if (playingNPC.isPlayable()) { //게임 시작하는 경우
         playingGame = games[playingNPC.num];
-        console.log("playing NPC num here: ", playingNPC.num);
-        console.log(playingGame);
         songLobby.stop();
         stage = 2;
       } else if (playingNPC.isReturnable()) { //게임 후 로비로 들어가는 경우
         if (playingNPC.mode == 1) { //성공했을 경우
           NPC_completed[playingNPC.num] = 1;
-
-          console.log("here1");
-
           success_count++;
         } else {
           NPCs[playingNPC.num].mode = 0;
@@ -750,7 +733,6 @@ function mouseClicked() {
 
 
   if (stage == 6 && allCompletePointer != -1) {
-    console.log("here");
     if (mouseX > 805 && mouseX < 955 && mouseY > 882 && mouseY < 957) {
       if (allCompletePointer == allCompleteScript.length - 1) {
         stage = 7;
@@ -786,7 +768,6 @@ function keyPressed() {
   //이동
   if (keyCode === UP_ARROW) {
     isUpKeyPressed = true;
-    console.log(stage);
   } else if (keyCode === DOWN_ARROW) {
     isDownKeyPressed = true;
   } else if (keyCode === LEFT_ARROW) {
@@ -827,24 +808,17 @@ function keyReleased() {
 }
 
 function spaceMove() {
-  console.log(stage);
     //무조건 오른쪽 버튼만 누른다고 가정했을 때. 왼쪽/오른쪽 버튼 선택 가능한 경우에는 여러 추가 작업이 필요해보여 일단 보류...!
       if (stage == 1 || stage == 3 || stage == 4){
         if (playingNPC.scriptPointer < scripts[playingNPC.num][playingNPC.mode].length-1){
         playingNPC.scriptPointer++;
         } else if (playingNPC.isPlayable()) { //게임 시작하는 경우
           playingGame = games[playingNPC.num];
-          console.log("playing NPC num here: ", playingNPC.num);
-          console.log(playingGame);
           songLobby.stop();
           stage = 2;
         } else if (playingNPC.isReturnable()) { //게임 후 로비로 들어가는 경우
           if (playingNPC.mode == 1) { //성공했을 경우
             NPC_completed[playingNPC.num] = 1;
-  
-            console.log("here2");
-  
-  
             success_count++;
           } else {
             NPCs[playingNPC.num].mode = 0;
@@ -879,7 +853,6 @@ function spaceMove() {
         }
         stage++;
       } else if (stage == -1) {
-        console.log(missionPointer);
         if (missionPointer != -1 && missionPointer < bartenderScript.length -1){
           missionPointer++;
         } else if (missionPointer == bartenderScript.length -1) {
